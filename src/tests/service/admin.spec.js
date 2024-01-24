@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { AdminService } = require("../../service/admin");
-const { Admin } = require("../../../models/admins");
+const { Admin, Account, Company } = require("../../../models");
 const {
   validatePasswordToken,
   issueResetPassToken,
@@ -10,12 +10,22 @@ const { ResetPasswordTokens } = require("../../../models/resetPasswordTokens");
 const ERROR_CODES = require("../../constant/error-messages");
 const { emailService } = require("../../utils/email");
 
-jest.mock("../../../models/admins", () => ({
+jest.mock("../../../models", () => ({
   Admin: {
+    hasMany: jest.fn(),
+    belongsTo: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
     destroy: jest.fn(),
     findOne: jest.fn(),
+  },
+  Account: {
+    hasMany: jest.fn(),
+    belongsTo: jest.fn(),
+  },
+  Company: {
+    hasMany: jest.fn(),
+    belongsTo: jest.fn(),
   },
 }));
 jest.mock("../../../models/resetPasswordTokens", () => ({
