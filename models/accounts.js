@@ -1,28 +1,28 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../src/utils/database");
-const Admin = sequelize.define("admins", {
+const Account = sequelize.define("accounts", {
   id: {
     autoIncrement: true,
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
   },
-  companyId: {
+  userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'companies',
+      model: 'admins',
       key: 'id',
     },
   },
-  email: {
+  accountNo: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  password: {
-    type: DataTypes.STRING(255),
+  balance: {
+    type: DataTypes.DOUBLE,
     allowNull: false,
   },
 });
 
-module.exports = { Admin };
+module.exports = { Account };

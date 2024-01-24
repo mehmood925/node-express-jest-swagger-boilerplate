@@ -3,7 +3,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const ERROR_CODES = require("../constant/error-messages");
 const CustomError = require("../utils/error");
-const { Admin } = require("../../models/admins");
+const { Admin } = require("../../models/index");
 const authMiddleware = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {

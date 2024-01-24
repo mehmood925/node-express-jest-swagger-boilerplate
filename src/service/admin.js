@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const passCom = require("joi-password-complexity");
 const ERROR_CODES = require("../constant/error-messages");
 const CustomError = require("../utils/error");
-const { Admin } = require("../../models/admins");
+const { Admin, Account } = require("../../models");
 const { ResetPasswordTokens } = require("../../models/resetPasswordTokens");
 const { emailService } = require("../utils/email");
 const CONST_VARS = require("../constant/constant")
@@ -36,6 +36,7 @@ class AdminService {
     await Admin.create({
       email: params.email,
       password: bcrypt.hashSync(params.password, bcrypt.genSaltSync(2)),
+      companyId: params.companyId,
     });
     return true;
   }
@@ -57,9 +58,10 @@ class AdminService {
 
   static async getProfile(params) {
     const _user = await Admin.findOne({
-      where: { id: params.id },
-      attributes: { exclude: ["password"] },
-      raw: true,
+      nest: true, 
+      where: { id: params.id }, 
+      attributes: {exclude: ["password"]},
+      include: [{ model: Account, as: "accounts", attributes: ['id', 'userId', 'balance'] }],
     });
     return _user;
   }
