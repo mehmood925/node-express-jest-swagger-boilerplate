@@ -9,4 +9,4 @@ execute the following commands in order
 > npm start
 
 To see the documentation, please visit the following link
-https://docs.google.com/document/d/1nS1aZpwnZbrM6BdTjoku7OvE7HhMccg9ax08x9jqh6o/edit#heading=h.59ugglgvejhs
+https://docs.google.com/document/d/18nYIcsWS56sLkvRXHIp-vy-3qOi89KB1mMpRGMk35cQ/edit?usp=sharing
