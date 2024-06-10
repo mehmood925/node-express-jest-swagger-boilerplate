@@ -3,7 +3,6 @@ const { responseHandler } = require("../utils/response");
 class CompanyController {
   static async register(req, res, next) {
     try {
-      console.log({body: req.body})
       const result = await CompanyService.register(req.body);
       return responseHandler({
         response: res,
