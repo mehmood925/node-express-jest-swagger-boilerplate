@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const mongoose = require('mongoose');
-//const { setRouter } = require("./routes/api");
+const { setRouter } = require("./routes/api");
 const { globalErrorHandler } = require("./utils/response");
 
 /////////////////// EXPRESS APP ///////////////////
@@ -36,7 +36,7 @@ if (process.env.ENV === "development") {
 }
 
 /////////////// SET PUBLIC ROUTER ////////////////
-//setRouter(app);
+setRouter(app);
 
 /////// GLOBAL ERROR HANDLER AS MIDDLEWARE ///////
 app.use((err, req, res, next) => globalErrorHandler(err, req, res, next));
@@ -56,6 +56,4 @@ mongoose.connect(uri, {})
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
-  });
-
-module.exports = { app };
+});

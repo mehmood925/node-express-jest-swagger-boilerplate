@@ -38,4 +38,7 @@ module.exports = {
   INVALID_PARAMETERS: {
     message: "Invalid parameters.",
   },
+  RECORD_NOT_FOUND: {
+    message: "Record Not Found.",
+  },
 };
