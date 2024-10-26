@@ -1,19 +1,23 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../src/utils/database");
-const ResetPasswordTokens = sequelize.define("resetPasswordTokens", {
+const UserToken = sequelize.define("userTokens", {
   id: {
     autoIncrement: true,
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
   },
-  email: {
-    type: DataTypes.STRING(255),
+  userId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
   },
   token: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
 });
-module.exports = { ResetPasswordTokens };
+module.exports = { UserToken };

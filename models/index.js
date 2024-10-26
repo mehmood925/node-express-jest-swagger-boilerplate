@@ -1,25 +1,11 @@
-const { Company } = require("./companies");
-const { Admin } = require("./admins");
-const { Account } = require("./accounts");
+const { User } = require("./users");
+const { UserToken } = require("./userTokens");
 
 // Define association between Company and Admin models
-Company.hasMany(Admin, { as: "admins", foreignKey: "companyId" });
-Admin.belongsTo(Company, { as: "company", foreignKey: "companyId" });
-
-// Define association between Admin and Account models
-Admin.hasMany(Account, {
-  as: "accounts",
-  foreignKey: "userId",
-  sourceKey: "id",
-});
-Account.belongsTo(Admin, {
-  as: "owner",
-  foreignKey: "userId",
-  sourceKey: "id",
-});
+User.hasMany(UserToken, { as: "users_userTokens", foreignKey: "userId" });
+UserToken.belongsTo(User, { as: "userTokens_users", foreignKey: "userId" });
 
 module.exports = {
-  Company,
-  Admin,
-  Account,
+  User,
+  UserToken,
 };
