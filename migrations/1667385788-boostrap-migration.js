@@ -17,8 +17,17 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      phone: {
+        type: Sequelize.STRING(15),
+        allowNull: false,
+      },
+      isActive: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
       role: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.ENUM("admin", "user"),
         allowNull: false,
       },
       createdAt: {

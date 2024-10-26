@@ -14,6 +14,9 @@ module.exports = {
   USER_ALREADY_EXISTS: {
     message: "An account with this email already exists!",
   },
+  PHONE_ALREADY_EXISTS: {
+    message: "An account with this phone already exists!",
+  },
   PASS_RULES_ERROR: {
     message:   "Password Should Be Betweem 8 - 26 Characters And Must Include Atleast One Lower Case, Upper Case, Numeric And Symbol",
   },
@@ -37,5 +40,8 @@ module.exports = {
   },
   INVALID_PARAMETERS: {
     message: "Invalid parameters.",
+  },
+  UNAUTHORISED: {
+    message: "User is not authorised",
   },
 };

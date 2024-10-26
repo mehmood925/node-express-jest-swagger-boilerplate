@@ -1,93 +1,70 @@
-/* eslint-disable consistent-return */
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
-const ERROR_CODES = require("../constant/error-messages");
-const CustomError = require("../utils/error");
-const { Admin } = require("../../models/index");
-const authMiddleware = async (req, res, next) => {
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const ERROR_CODES = require('../constant/error-messages');
+const CustomError = require('../utils/error');
+const { User, UserToken } = require('../../models');
+
+const verifyAuthToken = async (token) => {
+  const _verifiedToken = jwt.verify(token, process.env.JWT_SECRET, {
+    algorithms: ['HS256'],
+  });
+  if (
+    !_verifiedToken ||
+    (_verifiedToken.exp && Math.floor(Date.now() / 1000) > _verifiedToken.exp)
+  ) {
+    throw new CustomError(ERROR_CODES.AUTH_TOKEN_EXPIRED);
+  }
+  return _verifiedToken;
+};
+
+const validateAuthToken = (token) => {
+  if (!token) throw new CustomError(ERROR_CODES.AUTH_TOKEN_EXPIRED);
+  const [bearer, authToken] = token.split(' ');
+  if (bearer !== 'Bearer' || !authToken) return null;
+  return authToken;
+};
+
+const authMiddleware = (roles) => async (req, res, next) => {
   try {
-    if (!req.headers.authorization) {
-      throw new CustomError(ERROR_CODES.AUTH_TOKEN_REQUIRED);
-    }
-    const tokens = req.headers.authorization.split(" ");
-    if (
-      tokens &&
-      tokens.length > 0 &&
-      tokens[0] === "Bearer" &&
-      tokens[1] &&
-      tokens[1] !== "null"
-    ) {
-      verify(tokens[1], (err, user) => {
-        if (err) {
-          return res
-            .status(401)
-            .send({ code: 401, message: err.message, result: null });
-        }
-        req.loggedUser = user;
-        return next();
-      });
-    } else {
+    const _token = validateAuthToken(req.headers.authorization);
+    if (!_token)
       return res
         .status(401)
-        .send({ code: 401, message: "Authorization header is required" });
-    }
-  } catch (error) {
-    console.log("error", "policy list error in authentication", {
-      meta: { error: error.stack },
+        .send({ code: 401, message: 'Authorization header is required' });
+
+    const _verifiedToken = await verifyAuthToken(_token);
+    const _userTokens = await UserToken.findAll({
+      where: { userId: _verifiedToken.id },
+      raw: true,
     });
-    next(error);
+    if (!_userTokens.some((item) => item.token === _token))
+      return res
+        .status(401)
+        .send({ code: 401, message: 'Authorization header is invalid' });
+
+    const _user = await User.findOne({where: {id: _verifiedToken.id}, raw: true});
+    if (!_user?.isActive || !roles.includes(_user.role))
+      throw new CustomError(ERROR_CODES.UNAUTHORISED);
+    // if (!_user.email_verified) throw new CustomError(ERROR_CODES.VERIFY_EMAIL);
+    delete _user.password;
+    req.headers.loggedUser = _user;
+    req.headers.token = _token;
+    return next();
+  } catch (error) {
+    if (error?.expiredAt)
+      return res.status(401).send({
+        code: 401,
+        message: 'Authorization token is expired',
+        result: null,
+      });
+    return next(error);
   }
 };
 
-const issueToken = (payload) => {
-  return jwt.sign(payload, process.env.ADMIN_TOKEN_SECRET_KEY, {
-    expiresIn: `${process.env.ADMIN_TOKEN_EXPIRY_H}h`,
-  });
-};
+const generateToken = (payload) => ({
+  accessToken: jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRATION,
+  }),
+});
 
-const issueResetPassToken = (payload) => {
-  return jwt.sign(payload, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY, {
-    expiresIn: `${process.env.RESET_PASSWORD_TOKEN_EXPIRY_MIN}m`,
-  });
-};
-
-const validatePasswordToken = (token) => {
-  if (!token) {
-    return 404;
-  }
-  try {
-    const _decoded = jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY);
-    return _decoded;
-  }
-  catch (err) {
-    return 404
-  }
-}
-
-
-const verify = async (token, done) => {
-  jwt.verify(token, process.env.ADMIN_TOKEN_SECRET_KEY, {}, async (err, decoded) => {
-    if (err) {
-      switch (err.message) {
-        case "jwt expired":
-          return done(ERROR_CODES.AUTH_TOKEN_EXPIRED);
-        case "invalid token":
-          return done(ERROR_CODES.AUTH_TOKEN_INVALID);
-        default:
-          return done(ERROR_CODES.AUTH_TOKEN_INVALID);
-      }
-    } else {
-      const user = await Admin.findOne( { where: {id: decoded.id}, raw: true});
-      return user && user.id
-        ? done(null, user)
-        : done(ERROR_CODES.AUTH_TOKEN_EXPIRED);
-    }
-  });
-};
-
-module.exports = {
-  authMiddleware,
-  issueToken,
-  issueResetPassToken,
-  validatePasswordToken,
-};
+module.exports = { authMiddleware, generateToken };

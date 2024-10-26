@@ -24,7 +24,7 @@ const config = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -32,7 +32,7 @@ const config = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -43,13 +43,13 @@ const config = {
   // ],
 
   // An object that configures minimum threshold enforcement for coverage results
-   coverageThreshold: {
-    "global": {
-      "branches": 50,
-      "functions": 50,
-      "lines": 50,
-      "statements": 50
-    }
+  coverageThreshold: {
+    global: {
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: 50,
+    },
   },
 
   // A path to a custom dependency extractor
@@ -158,7 +158,7 @@ const config = {
   // testEnvironmentOptions: {},
 
   // Adds a location field to test results
-   testLocationInResults: true,
+  testLocationInResults: true,
 
   // The glob patterns Jest uses to detect test files
   // testMatch: [
@@ -199,7 +199,7 @@ const config = {
   // watchPathIgnorePatterns: [],
 
   // Whether to use watchman for file crawling
-   watchman: true,
+  watchman: true,
 };
 
 module.exports = config;

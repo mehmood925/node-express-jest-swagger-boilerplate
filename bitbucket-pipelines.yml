@@ -1,0 +1,61 @@
+image: maven:3.3.9
+
+clone:
+  depth: full
+
+definitions:
+  caches:
+    sonar: ~/.sonar
+
+pipelines:
+  branches:
+    development:
+      - step:
+          name: Deploy to DEV
+          deployment: development
+          image: node:latest
+          timeout: 2
+          script:
+            - pipe: atlassian/ssh-run:0.2.8
+              variables:
+                SSH_USER: 'ubuntu'
+                SERVER: '$SERVER'
+                MODE: 'command'
+                SSH_KEY: $SSH_KEY
+                COMMAND: |
+                  export DB_HOST=$DB_HOST
+                  export DB_NAME=$DB_NAME
+                  export DB_USER=$DB_USER
+                  export DB_PASS=$DB_PASS
+                  export SMTP_USERNAME=$SMTP_USERNAME
+                  export SMTP_PASSWORD=$SMTP_PASSWORD
+                  export SMTP_HOST=$SMTP_HOST
+                  export SENDER_EMAIL=$SENDER_EMAIL
+                  export SMTP_PORT=$SMTP_PORT
+                  export JWT_SECRET=$JWT_SECRET
+                  export JWT_EXPIRATION=$JWT_EXPIRATION
+                  export RESET_PASSWORD_TOKEN_SECRET_KEY=$RESET_PASSWORD_TOKEN_SECRET_KEY
+                  export RESET_PASSWORD_TOKEN_EXPIRY_MIN=$RESET_PASSWORD_TOKEN_EXPIRY_MIN
+                  export JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET
+                  export JWT_REFRESH_EXPIRATION=$JWT_REFRESH_EXPIRATION
+                  export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                  export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                  export AWS_REGION=$AWS_REGION
+                  export AWS_S3_BUCKET_NAME=$AWS_S3_BUCKET_NAME
+                  export REGISTRATION_CODE=$REGISTRATION_CODE
+                  export ADMIN_NAME=$ADMIN_NAME
+                  export ADMIN_PASSWORD=$ADMIN_PASSWORD
+                  export ADMIN_EMAIL=$ADMIN_EMAIL
+                  export TWILIO_PHONE_NUMBER=$TWILIO_PHONE_NUMBER
+                  cd /home/ubuntu && ./ollivate-dev-be.sh
+                  
+    main:
+      - step:
+          name: SonarQube analysis
+          caches:
+            - sonar
+          script:
+            - pipe: sonarsource/sonarqube-scan:1.0.0
+              variables:
+                SONAR_HOST_URL: ${SONAR_HOST_URL}
+                SONAR_TOKEN: ${SONAR_TOKEN}
