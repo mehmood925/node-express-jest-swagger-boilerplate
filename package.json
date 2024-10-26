@@ -9,7 +9,7 @@
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage",
     "start": "env DEBUG=provider:* node ./src/index.js",
-    "start:nodemon": "env DEBUG=provider:* ./node_modules/nodemon/bin/nodemon.js index.js"
+    "dev": "nodemon --trace-warnings --exec 'env DEBUG=provider:* node' ./src/index.js"
   },
   "author": "Mehmood Hussain",
   "license": "MIT",

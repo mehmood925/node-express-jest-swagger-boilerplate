@@ -1,59 +1,26 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("companies", {
+    await queryInterface.createTable("users", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-      },
-      name: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-      },
-      address: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-      },
-      type: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
-    });
-    await queryInterface.createTable("admins", {
-      id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false,
-      },
-      companyId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'companies',
-          key: 'id',
-        },
       },
       email: {
         type: Sequelize.STRING(255),
+        unique: true,
         allowNull: false,
       },
       password: {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      role: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -65,7 +32,8 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
-    await queryInterface.createTable("accounts", {
+    
+    await queryInterface.createTable("userTokens", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -76,43 +44,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'admins',
-          key: 'id',
+          model: 'users',
+          key: 'id'
         },
       },
-      accountNo: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-      },
-      balance: {
-        type: Sequelize.DOUBLE,
-        allowNull: false,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-      },
-    });
-    await queryInterface.addIndex("admins", ["email"]);
-    await queryInterface.createTable("resetPasswordTokens", {
-      id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-      },
       token: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       createdAt: {
@@ -126,12 +63,13 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
-    await queryInterface.addIndex("resetPasswordTokens", ["email"]);
+
+    await queryInterface.addIndex("users", ["email"]);
+    await queryInterface.addIndex("userTokens", ["userId"]);
+    await queryInterface.addIndex("userTokens", ["token"]);
   },
   async down(queryInterface) {
-    await queryInterface.dropTable("resetPasswordTokens");
-    await queryInterface.dropTable("accounts");
-    await queryInterface.dropTable("admins");
-    await queryInterface.dropTable("companies");
+    await queryInterface.dropTable("userTokens");
+    await queryInterface.dropTable("users");
   },
 };
