@@ -1,34 +1,34 @@
 require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const ERROR_CODES = require('../constant/error-messages');
-const CustomError = require('../utils/error');
+const _jwt = require('jsonwebtoken');
+const _ERROR_CODES = require('../constant/error-messages');
+const _CustomError = require('../utils/error');
 const { UserDal, UserTokenDal } = require('../dal/index');
 
-const verifyAuthToken = async (token) => {
-  const _verifiedToken = jwt.verify(token, process.env.JWT_SECRET, {
+const verifyAuthToken = async (_token) => {
+  const _verifiedToken = _jwt.verify(_token, process.env.JWT_SECRET, {
     algorithms: ['HS256'],
   });
   if (
     !_verifiedToken ||
     (_verifiedToken.exp && Math.floor(Date.now() / 1000) > _verifiedToken.exp)
   ) {
-    throw new CustomError(ERROR_CODES.AUTH_TOKEN_EXPIRED);
+    throw new _CustomError(_ERROR_CODES.AUTH_TOKEN_EXPIRED);
   }
   return _verifiedToken;
 };
 
-const validateAuthToken = (token) => {
-  if (!token) throw new CustomError(ERROR_CODES.AUTH_TOKEN_EXPIRED);
-  const [_bearer, _authToken] = token.split(' ');
+const validateAuthToken = (_token) => {
+  if (!_token) throw new _CustomError(_ERROR_CODES.AUTH_TOKEN_EXPIRED);
+  const [_bearer, _authToken] = _token.split(' ');
   if (_bearer !== 'Bearer' || !_authToken) return null;
   return _authToken;
 };
 
-const authMiddleware = (roles) => async (req, res, next) => {
+const authMiddleware = (_roles) => async (_req, _res, _next) => {
   try {
-    const _token = validateAuthToken(req.headers.authorization);
+    const _token = validateAuthToken(_req.headers.authorization);
     if (!_token)
-      return res
+      return _res
         .status(401)
         .send({ code: 401, message: 'Authorization header is required' });
 
@@ -37,28 +37,28 @@ const authMiddleware = (roles) => async (req, res, next) => {
       where: { userId: _verifiedToken.id },
     });
 
-    if (!_userTokens.some((item) => item.token === _token))
-      return res
+    if (!_userTokens.some((_item) => _item.token === _token))
+      return _res
         .status(401)
         .send({ code: 401, message: 'Authorization header is invalid' });
 
     const _user = await UserDal.findOne({ where: { id: _verifiedToken.id } });
-    if (!_user?.isActive || !roles.includes(_user.role))
-      throw new CustomError(ERROR_CODES.UNAUTHORISED);
-    //if (!user.emailVerified) throw new CustomError(ERROR_CODES.VERIFY_EMAIL);
+    if (!_user?.isActive || !_roles.includes(_user.role))
+      throw new _CustomError(_ERROR_CODES.UNAUTHORISED);
+    //if (!_user.emailVerified) throw new _CustomError(_ERROR_CODES.VERIFY_EMAIL);
 
     delete _user.password;
-    req.headers.loggedUser = _user;
-    req.headers.token = _token;
-    return next();
-  } catch (error) {
-    if (error?.expiredAt)
-      return res.status(401).send({
+    _req.headers.loggedUser = _user;
+    _req.headers.token = _token;
+    return _next();
+  } catch (_error) {
+    if (_error?.expiredAt)
+      return _res.status(401).send({
         code: 401,
         message: 'Authorization token is expired',
         result: null,
       });
-    return next(error);
+    return _next(_error);
   }
 };
 

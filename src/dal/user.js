@@ -4,17 +4,17 @@ const { User } = require('../../models/index');
 const { logger } = require('../utils/logger');
 
 class UserDal {
-  static async findOne(params) {
+  static async findOne(_params) {
     const _response = await User.findOne({
-      where: params.where,
-      attributes: params.attributes,
+      where: _params.where,
+      attributes: _params.attributes,
       raw: true,
     });
     return _response;
   }
 
-  static async create(params) {
-    let _response = await User.create(params);
+  static async create(_params) {
+    let _response = await User.create(_params);
     return _response.id;
   }
 }

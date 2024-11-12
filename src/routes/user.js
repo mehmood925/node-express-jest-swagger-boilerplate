@@ -1,19 +1,23 @@
-const express = require('express');
-const _router = express.Router();
+const _express = require('express');
+const _router = _express.Router();
 const _controller = require('../controllers/user');
-const validationMiddleware = require('../middleware/validation');
-const valdations = require('../validations/user');
+const _validationMiddleware = require('../middleware/validation');
+const _valdations = require('../validations/user');
 const { authMiddleware } = require('../middleware/auth');
-const CONSTANTS = require('../constant/constant');
+const _CONSTANTS = require('../constant/constant');
 _router.post(
   '/register',
-  validationMiddleware(valdations.register),
+  _validationMiddleware(_valdations.register),
   _controller.register
 );
-_router.post('/login', validationMiddleware(valdations.login), _controller.login);
+_router.post(
+  '/login',
+  _validationMiddleware(_valdations.login),
+  _controller.login
+);
 _router.get(
   '/getProfile',
-  authMiddleware([CONSTANTS.ADMIN]),
+  authMiddleware([_CONSTANTS.ADMIN]),
   _controller.getProfile
 );
 // router.get("/verifyResetPasswordToken", controller.verifyToken);
@@ -28,4 +32,4 @@ _router.get(
 // router.post("/resetPassword", validationMiddleware(valdations.resetPassword),
 // controller.resetPassword);
 
-module.exports = router;
+module.exports = _router;

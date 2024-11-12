@@ -1,46 +1,46 @@
-const service = require('../service/user');
+const _service = require('../service/user');
 const { logger } = require('../utils/logger');
 const { responseHandler } = require('../utils/response');
 class Controller {
-  static async register(req, res, next) {
+  static async register(_req, _res, _next) {
     try {
-      const _response = await service.register(req.body);
+      const _response = await _service.register(_req.body);
       return responseHandler({
-        response: res,
+        response: _res,
         result: _response,
       });
-    } catch (error) {
+    } catch (_error) {
       logger.info(`=====> ERROR REGISTER API`);
-      logger.info(error.message);
-      next(error);
+      logger.info(_error.message);
+      _next(_error);
     }
   }
 
-  static async login(req, res, next) {
+  static async login(_req, _res, _next) {
     try {
-      const _response = await service.login(req.body);
+      const _response = await _service.login(_req.body);
       return responseHandler({
-        response: res,
+        response: _res,
         result: _response,
       });
-    } catch (error) {
-      logger.info(`=====> ERROR LOGIN API`);
-      logger.info(error.message);
-      next(error);
+    } catch (_error) {
+      logger.info(`=====> ERROR REGISTER API`);
+      logger.info(_error.message);
+      _next(_error);
     }
   }
 
-  static async getProfile(req, res, next) {
+  static async getProfile(_req, _res, _next) {
     try {
-      const _response = await service.getProfile(req.headers.loggedUser);
+      const _response = await _service.getProfile(_req.headers.loggedUser);
       return responseHandler({
-        response: res,
+        response: _res,
         result: _response,
       });
-    } catch (error) {
-      logger.info(`=====> ERROR GET PROFILE API`);
-      logger.info(error.message);
-      next(error);
+    } catch (_error) {
+      logger.info(`=====> ERROR REGISTER API`);
+      logger.info(_error.message);
+      _next(_error);
     }
   }
 
