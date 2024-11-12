@@ -29,8 +29,8 @@ class EmailService {
       await transporter.sendMail(mailOptions);
       return 'ok';
     } catch (error) {
-      logger.error('Error in Email Service')
-      logger.error(error.message)
+      logger.error('Error in Email Service');
+      logger.error(error.message);
       return error;
     }
   }

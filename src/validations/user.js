@@ -2,39 +2,15 @@ const Joi = require('joi');
 const { safeString } = require('./customValidation');
 
 module.exports.register = Joi.object({
-  firstName: safeString
-    .string()
-    .htmlStrip()
-    .trim()
-    .min(1)
-    .max(100)
-    .required(),
-  lastName: safeString
-    .string()
-    .htmlStrip()
-    .trim()
-    .min(1)
-    .max(100)
-    .required(),
-  username: safeString
-    .string()
-    .htmlStrip()
-    .trim()
-    .min(1)
-    .max(100)
-    .required(),
+  firstName: safeString.string().htmlStrip().trim().min(1).max(100).required(),
+  lastName: safeString.string().htmlStrip().trim().min(1).max(100).required(),
+  username: safeString.string().htmlStrip().trim().min(1).max(100).required(),
   email: Joi.string()
     .max(324)
     .trim()
     .regex(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)
     .required(),
-  password: safeString
-    .string()
-    .htmlStrip()
-    .trim()
-    .min(1)
-    .max(100)
-    .required(),
+  password: safeString.string().htmlStrip().trim().min(1).max(100).required(),
   phone: Joi.string()
     .pattern(/^\+([1-9]{1}[0-9]{0,2})\d{6,14}$/)
     .messages({
@@ -50,30 +26,18 @@ module.exports.login = Joi.object({
     .trim()
     .regex(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)
     .required(),
-  password: safeString
-    .string()
-    .htmlStrip()
-    .trim()
-    .min(1)
-    .max(100)
-    .required(),
+  password: safeString.string().htmlStrip().trim().min(1).max(100).required(),
 });
 
 module.exports.updatePassword = Joi.object({
-  password: safeString
+  password: safeString.string().htmlStrip().trim().min(1).max(100).required(),
+  newPassword: safeString
     .string()
     .htmlStrip()
     .trim()
     .min(1)
     .max(100)
     .required(),
-  newPassword: safeString
-  .string()
-  .htmlStrip()
-  .trim()
-  .min(1)
-  .max(100)
-  .required(),
 });
 
 module.exports.forgetPassword = Joi.object({

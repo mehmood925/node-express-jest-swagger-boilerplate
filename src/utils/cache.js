@@ -135,7 +135,7 @@ class RedisCache {
       } while (cursor !== '0');
 
       if (keys.length > 0) {
-        const values = await client.mget(keys); 
+        const values = await client.mget(keys);
         return values;
       } else {
         return [];

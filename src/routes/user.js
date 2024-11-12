@@ -1,21 +1,21 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const controller = require("../controllers/user");
-const validationMiddleware = require("../middleware/validation");
-const valdations = require("../validations/user");
-const { authMiddleware } = require("../middleware/auth");
-const CONSTANTS = require("../constant/constant")
+const controller = require('../controllers/user');
+const validationMiddleware = require('../middleware/validation');
+const valdations = require('../validations/user');
+const { authMiddleware } = require('../middleware/auth');
+const CONSTANTS = require('../constant/constant');
 router.post(
-  "/register",
+  '/register',
   validationMiddleware(valdations.register),
   controller.register
 );
-router.post(
-  "/login",
-  validationMiddleware(valdations.login),
-  controller.login
+router.post('/login', validationMiddleware(valdations.login), controller.login);
+router.get(
+  '/getProfile',
+  authMiddleware([CONSTANTS.ADMIN]),
+  controller.getProfile
 );
-router.get("/getProfile", authMiddleware([CONSTANTS.ADMIN]), controller.getProfile);
 // router.get("/verifyResetPasswordToken", controller.verifyToken);
 // router.patch(
 //   "/updatePassword",

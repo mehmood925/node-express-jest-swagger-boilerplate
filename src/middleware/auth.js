@@ -34,17 +34,15 @@ const authMiddleware = (roles) => async (req, res, next) => {
 
     const verifiedToken = await verifyAuthToken(token);
     const userTokens = await UserTokenDal.findAll({
-      where: {userId: verifiedToken.id},
-    },
-    );
-    
-    if (!userTokens.some((item) => item.token === token))
+      where: { userId: verifiedToken.id },
+    });
 
+    if (!userTokens.some((item) => item.token === token))
       return res
         .status(401)
         .send({ code: 401, message: 'Authorization header is invalid' });
 
-    const user = await UserDal.findOne({where:{id: verifiedToken.id}});
+    const user = await UserDal.findOne({ where: { id: verifiedToken.id } });
     if (!user?.isActive || !roles.includes(user.role))
       throw new CustomError(ERROR_CODES.UNAUTHORISED);
     //if (!user.emailVerified) throw new CustomError(ERROR_CODES.VERIFY_EMAIL);

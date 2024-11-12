@@ -1,8 +1,7 @@
 // const ERROR_CODES = require('../constant/error-messages');
 // const CustomError = require('../utils/error');
-const { UserToken } = require("../../models/index");
-const { logger } = require("../utils/logger");
-
+const { UserToken } = require('../../models/index');
+const { logger } = require('../utils/logger');
 
 class UserTokenDal {
   static async findOne(params) {
@@ -27,7 +26,6 @@ class UserTokenDal {
     let _response = await UserToken.create(params);
     return _response.id;
   }
-
 }
 
 module.exports = { UserTokenDal };

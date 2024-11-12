@@ -1,6 +1,6 @@
-const service = require("../service/user");
-const { logger } = require("../utils/logger");
-const { responseHandler } = require("../utils/response");
+const service = require('../service/user');
+const { logger } = require('../utils/logger');
+const { responseHandler } = require('../utils/response');
 class Controller {
   static async register(req, res, next) {
     try {
@@ -10,12 +10,12 @@ class Controller {
         result: _response,
       });
     } catch (error) {
-      logger.info(`=====> ERROR REGISTER API`)
-      logger.info(error.message)
+      logger.info(`=====> ERROR REGISTER API`);
+      logger.info(error.message);
       next(error);
     }
   }
-  
+
   static async login(req, res, next) {
     try {
       const _response = await service.login(req.body);
@@ -24,12 +24,12 @@ class Controller {
         result: _response,
       });
     } catch (error) {
-      logger.info(`=====> ERROR LOGIN API`)
-      logger.info(error.message)
+      logger.info(`=====> ERROR LOGIN API`);
+      logger.info(error.message);
       next(error);
     }
   }
-  
+
   static async getProfile(req, res, next) {
     try {
       const result = await service.getProfile(req.headers.loggedUser);
@@ -38,8 +38,8 @@ class Controller {
         result,
       });
     } catch (error) {
-      logger.info(`=====> ERROR GET PROFILE API`)
-      logger.info(error.message)
+      logger.info(`=====> ERROR GET PROFILE API`);
+      logger.info(error.message);
       next(error);
     }
   }
@@ -96,4 +96,4 @@ class Controller {
   // }
 }
 
-module.exports = Controller
+module.exports = Controller;

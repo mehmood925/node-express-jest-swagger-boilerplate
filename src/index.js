@@ -1,12 +1,12 @@
-require("dotenv").config();
-const express = require("express");
-const http = require("http");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
-const { setRouter } = require("./routes/api");
-const { globalErrorHandler } = require("./utils/response");
+require('dotenv').config();
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+const { setRouter } = require('./routes/api');
+const { globalErrorHandler } = require('./utils/response');
 const { logger } = require('./utils/logger');
 const { CronClass } = require('./crons/cron');
 
@@ -32,8 +32,8 @@ app.use(
 );
 
 /*///////////////// SWAGGER UI /////////////////*/
-if (process.env.ENV === "development") {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+if (process.env.ENV === 'development') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
 /*///////////// SET PUBLIC ROUTER //////////////*/

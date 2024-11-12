@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -63,7 +63,7 @@ module.exports = {
       },
       forgetPasswordVerified: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false, 
+        defaultValue: false,
         allowNull: false,
       },
       resetPasswordExpiry: {
@@ -95,23 +95,23 @@ module.exports = {
         defaultValue: true,
       },
       role: {
-        type: Sequelize.ENUM("superAdmin", "admin", "agent", "merchant"),
+        type: Sequelize.ENUM('superAdmin', 'admin', 'agent', 'merchant'),
         allowNull: false,
-        defaultValue: "merchant"
+        defaultValue: 'merchant',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
-    
-    await queryInterface.createTable("userTokens", {
+
+    await queryInterface.createTable('userTokens', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -123,7 +123,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id'
+          key: 'id',
         },
       },
       token: {
@@ -133,22 +133,24 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
 
-    await queryInterface.addIndex("users", ["email"]);
-    await queryInterface.addIndex("userTokens", ["userId"]);
-    await queryInterface.addIndex("userTokens", ["token"]);
+    await queryInterface.addIndex('users', ['email']);
+    await queryInterface.addIndex('userTokens', ['userId']);
+    await queryInterface.addIndex('userTokens', ['token']);
   },
   async down(queryInterface) {
-    await queryInterface.dropTable("userTokens");
-    await queryInterface.dropTable("users");
-    await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_users_role";');
+    await queryInterface.dropTable('userTokens');
+    await queryInterface.dropTable('users');
+    await queryInterface.sequelize.query(
+      'DROP TYPE IF EXISTS "enum_users_role";'
+    );
   },
 };
