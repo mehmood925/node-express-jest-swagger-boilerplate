@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../src/utils/database");
-const UserToken = sequelize.define("userTokens", {
+const UserTokenModel = sequelize.define("userTokens", {
   id: {
     autoIncrement: true,
     type: DataTypes.INTEGER,
@@ -20,4 +20,4 @@ const UserToken = sequelize.define("userTokens", {
     allowNull: false,
   },
 });
-module.exports = { UserToken };
+module.exports = { UserTokenModel };

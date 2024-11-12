@@ -2,6 +2,27 @@ const Joi = require('joi');
 const { safeString } = require('./customValidation');
 
 module.exports.register = Joi.object({
+  firstName: safeString
+    .string()
+    .htmlStrip()
+    .trim()
+    .min(1)
+    .max(100)
+    .required(),
+  lastName: safeString
+    .string()
+    .htmlStrip()
+    .trim()
+    .min(1)
+    .max(100)
+    .required(),
+  username: safeString
+    .string()
+    .htmlStrip()
+    .trim()
+    .min(1)
+    .max(100)
+    .required(),
   email: Joi.string()
     .max(324)
     .trim()

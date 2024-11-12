@@ -1,4 +1,5 @@
 const service = require("../service/user");
+const { logger } = require("../utils/logger");
 const { responseHandler } = require("../utils/response");
 class Controller {
   static async register(req, res, next) {
@@ -9,6 +10,8 @@ class Controller {
         result: _response,
       });
     } catch (error) {
+      logger.info(`=====> ERROR REGISTER API`)
+      logger.info(error.message)
       next(error);
     }
   }
@@ -21,6 +24,8 @@ class Controller {
         result: _response,
       });
     } catch (error) {
+      logger.info(`=====> ERROR LOGIN API`)
+      logger.info(error.message)
       next(error);
     }
   }
@@ -33,6 +38,8 @@ class Controller {
         result,
       });
     } catch (error) {
+      logger.info(`=====> ERROR GET PROFILE API`)
+      logger.info(error.message)
       next(error);
     }
   }

@@ -8,6 +8,7 @@ const swaggerDocument = require("./swagger.json");
 const { setRouter } = require("./routes/api");
 const { globalErrorHandler } = require("./utils/response");
 const { logger } = require('./utils/logger');
+const { CronClass } = require('./crons/cron');
 
 /*///////////////// EXPRESS APP /////////////////*/
 const app = express();
@@ -40,6 +41,9 @@ setRouter(app);
 
 /*///// GLOBAL ERROR LANDLER AS MIDDLEWARE ////*/
 app.use((err, req, res, next) => globalErrorHandler(err, req, res, next));
+
+// CRON JOBS
+CronClass.sampleCronJob();
 
 /*//////////// EXPRESS APP SERVER /////////////*/
 app.server.listen(process.env.PORT || 3000, () => {

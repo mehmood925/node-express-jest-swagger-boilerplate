@@ -3,12 +3,15 @@ const passCom = require("joi-password-complexity");
 const { v4: uuidv4 } = require('uuid');
 const ERROR_CODES = require("../constant/error-messages");
 const CustomError = require("../utils/error");
-const { User, UserToken } = require("../../models");
+const { UserDal, UserTokenDal } = require("../dal");
 const { EmailService } = require("../utils/email");
+const EmailTemplate = require('../utils/emailTemplate');
 const CONSTANTS = require("../constant/constant")
-const {
-  generateToken
-} = require("../middleware/auth");
+const RedisCache = require('../utils/cache');
+const {logger} = require("../utils/logger")
+const { generateTokens } = require('../middleware/auth');
+const { generateRandomCode } = require('../utils/randomNumberGeneration');
+
 const _complexityOptions = {
   min: 8,
   max: 26,
@@ -20,16 +23,22 @@ const _complexityOptions = {
 
 class Service {
   static async register(params) {
-    const _existingProfile = await User.findOne({
-      where: { email: params.email },
-      raw: true,
-    });
-    if (_existingProfile) {
+    const _existingEmail = await UserDal.findOne({
+      where: {email: params.email}
+      },
+    );
+    if (_existingEmail) {
       throw new CustomError(ERROR_CODES.USER_ALREADY_EXISTS);
     }
-    const _existingPhone = await User.findOne({
-      where: { phone: params.phone },
-      raw: true,
+    const _existingUsername = await UserDal.findOne({
+      where: {username: params.username}
+      },
+    );
+    if (_existingUsername) {
+      throw new CustomError(ERROR_CODES.USERNAME_ALREADY_EXISTS);
+    }
+    const _existingPhone = await UserDal.findOne({
+      where:{phone: params.phone},
     });
     if (_existingPhone) {
       throw new CustomError(ERROR_CODES.PHONE_ALREADY_EXISTS);
@@ -38,41 +47,116 @@ class Service {
     if (_pass.error) {
       throw new CustomError(ERROR_CODES.PASS_RULES_ERROR);
     }
-    let _response = await User.create({
+    const verificationCode = generateRandomCode();
+    const verificationExpiry = new Date(
+      Date.now() +
+        CONSTANTS.EMAIL_CONFIRMATION_CODE_EXPIRY_TIME_IN_SECONDS * 1000,
+    ).getTime();
+    const _user = {
+      firstName: params.firstName,
+      lastName: params.lastName,
+      username: params.username,
       email: params.email,
       password: bcrypt.hashSync(params.password, bcrypt.genSaltSync(2)),
-      role: CONSTANTS.USER,
+      email_verification_otp: verificationCode,
+      email_verification_otp_expiry: verificationExpiry,
+      email_verified: false,
+      role: CONSTANTS.ADMIN,
       phone: params.phone,
+    }
+    let _userId = await UserDal.create(_user);
+    console.log("=++++++===++++===    1")
+    RedisCache.set(CONSTANTS.USER_EMAIL_OTP_ATTEMPTS, _userId, 1);
+    console.log("=++++++===++++===    2")
+
+
+    Service.sendEmailVerificationCode({
+      email: params.email,
+      verificationCode,
     });
-    return { id: _response.id };
+    console.log("=++++++===++++===    3")
+    const { accessToken, refreshToken } = generateTokens({
+      id: _userId,
+      email: _user.email,
+      role: _user.role,
+    });
+    console.log("=++++++===++++===    4")
+    await UserTokenDal.create({
+      userId: _userId,
+      token: accessToken,
+    });
+    console.log("=++++++===++++===    5")
+    RedisCache.setWithExpiry(
+      CONSTANTS.USER_REFRESH_TOKENS,
+      _userId,
+      refreshToken,
+      CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS,
+    );
+    console.log("=++++++===++++===    6")
+    return { accessToken, refreshToken, verificationExpiry, userId:_userId };
+  }
+
+  static sendEmailVerificationCode(params) {
+    // EmailService.sendEmail({
+    //   email: params.email,
+    //   subject: CONSTANTS.EMAIL_VERIFICATION_SUBJECT,
+    //   html: EmailTemplate.verificationEmailTemplate(params.verificationCode),
+    // });
   }
 
   static async login(params) {
-    const _profile = await User.findOne({
-      where: { email: params.email },
-      raw: true,
-    });
-    if (!_profile) {
+    const profile = await UserDal.findOne({where: {email: params.email}});
+    if (!profile) {
       throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);
     }
-    if (!(await bcrypt.compare(params.password, _profile.password))) {
-      throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);
-    }
-    const _token = generateToken({ id: _profile.id, email: _profile.email, phone: _profile.phone });
-    await UserToken.create({
-      userId: _profile.id,
-      token: _token.accessToken,
+
+    // if (profile.role !== CONSTANTS.USER) {
+    //   throw new CustomError(ERROR_CODES.UNAUTHORISED);
+    // }
+    await Service.processLoginValidations(params, profile);
+    const { accessToken, refreshToken } = generateTokens({
+      id: profile.id,
+      email: profile.email,
+      role: profile.role,
     });
-    return _token;
+    await UserTokenDal.create({
+      userId: profile.id,
+      token: accessToken,
+    });
+    RedisCache.setWithExpiry(
+      CONSTANTS.USER_REFRESH_TOKENS,
+      profile.id,
+      refreshToken,
+      CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS,
+    );
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   static async getProfile(params) {
-    const _user = await User.findOne({
-      nest: true, 
+    const _user = await UserDal.findOne({
       where: { id: params.id }, 
       attributes: {exclude: ["password"]},
     });
     return _user;
+  }
+
+  static async processLoginValidations(params, profile) {
+    if (!(await bcrypt.compare(params.password, profile.password))) {
+      throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);
+    }
+    // if (!profile.emailVerified) {
+    //   throw new CustomError(ERROR_CODES.VERIFY_EMAIL);
+    // }
+    // if (!profile.is_active) {
+    //   throw new CustomError(ERROR_CODES.ACCOUNT_DEACTIVATED);
+    // }
+    // const isBlocked = await RedisCache.get(CONSTANTS.BLOCKED_USERS, profile.id);
+    // if (isBlocked) {
+    //   throw new CustomError(ERROR_CODES.BLOCK_USER);
+    // }
   }
 
   // static async verifyToken(params) {

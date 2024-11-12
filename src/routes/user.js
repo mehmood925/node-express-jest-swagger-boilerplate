@@ -15,7 +15,7 @@ router.post(
   validationMiddleware(valdations.login),
   controller.login
 );
-router.get("/getProfile", authMiddleware([CONSTANTS.USER]), controller.getProfile);
+router.get("/getProfile", authMiddleware([CONSTANTS.ADMIN]), controller.getProfile);
 // router.get("/verifyResetPasswordToken", controller.verifyToken);
 // router.patch(
 //   "/updatePassword",
