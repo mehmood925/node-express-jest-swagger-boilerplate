@@ -32,10 +32,10 @@ class Controller {
 
   static async getProfile(req, res, next) {
     try {
-      const result = await service.getProfile(req.headers.loggedUser);
+      const _response = await service.getProfile(req.headers.loggedUser);
       return responseHandler({
         response: res,
-        result,
+        result: _response,
       });
     } catch (error) {
       logger.info(`=====> ERROR GET PROFILE API`);

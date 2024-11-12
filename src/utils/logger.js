@@ -3,37 +3,37 @@ const DailyRotateFile = require('winston-daily-rotate-file');
 const path = require('path');
 const fs = require('fs');
 
-const logDirectory = path.join(__dirname, '../../logs');
-if (!fs.existsSync(logDirectory)) {
-  fs.mkdirSync(logDirectory);
+const _logDirectory = path.join(__dirname, '../../logs');
+if (!fs.existsSync(_logDirectory)) {
+  fs.mkdirSync(_logDirectory);
 }
 
-const customFormat = format.printf(({ level, message, timestamp }) => {
-  const utcTimestamp =
+const _customFormat = format.printf(({ level, message, timestamp }) => {
+  const _utcTimestamp =
     new Date(timestamp).toISOString().split('T')[1].slice(0, 8) + ' UTC';
-  const logMessage =
+  const _logMessage =
     message instanceof Error
       ? `${message.stack || message.toString()}`
       : typeof message === 'object'
       ? JSON.stringify(message)
       : message;
 
-  return `[${utcTimestamp}] ${logMessage}`;
+  return `[${_utcTimestamp}] ${_logMessage}`;
 });
 
-const allTransports = [
+const _allTransports = [
   new transports.Console({
     level: 'info',
-    format: format.combine(format.timestamp(), customFormat),
+    format: format.combine(format.timestamp(), _customFormat),
     handleExceptions: true,
   }),
   new DailyRotateFile({
-    dirname: logDirectory,
+    dirname: _logDirectory,
     filename: 'application-%DATE%.log',
     datePattern: 'YYYY-MM-DD',
     maxSize: '20m',
     maxFiles: '14d',
-    format: format.combine(format.timestamp(), customFormat),
+    format: format.combine(format.timestamp(), _customFormat),
     handleExceptions: true,
   }),
 ];
@@ -41,7 +41,7 @@ const allTransports = [
 const logger = createLogger({
   level: 'info',
   format: format.combine(format.timestamp(), format.json()),
-  transports: allTransports,
+  transports: _allTransports,
   exitOnError: false,
 });
 

@@ -1,6 +1,6 @@
 const Joi = require(`joi`);
 
-const safeString = Joi.extend((joi) => ({
+const _safeString = Joi.extend((joi) => ({
   type: 'string',
   base: joi.string(),
   messages: {
@@ -9,25 +9,25 @@ const safeString = Joi.extend((joi) => ({
   },
   rules: {
     htmlStrip: {
-      validate(value, helpers) {
-        const clean = value.replace(/(<([^>]+)>)/gi, '');
-        if (clean === value) {
-          return clean;
+      validate(_value, _helpers) {
+        const _clean = _value.replace(/(<([^>]+)>)/gi, '');
+        if (_clean === _value) {
+          return _clean;
         }
-        return helpers.error('string.htmlStrip');
+        return _helpers.error('string.htmlStrip');
       },
     },
     withoutEquals: {
-      validate(value, helpers) {
-        if (!value.includes('=')) {
-          return value;
+      validate(_value, _helpers) {
+        if (!_value.includes('=')) {
+          return _value;
         }
-        return helpers.error('string.withoutEquals');
+        return _helpers.error('string.withoutEquals');
       },
     },
   },
 }));
 
 module.exports = {
-  safeString,
+  safeString: _safeString,
 };

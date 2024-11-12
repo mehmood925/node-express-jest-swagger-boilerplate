@@ -5,51 +5,51 @@ const CustomError = require('../utils/error');
 const { UserDal, UserTokenDal } = require('../dal/index');
 
 const verifyAuthToken = async (token) => {
-  const verifiedToken = jwt.verify(token, process.env.JWT_SECRET, {
+  const _verifiedToken = jwt.verify(token, process.env.JWT_SECRET, {
     algorithms: ['HS256'],
   });
   if (
-    !verifiedToken ||
-    (verifiedToken.exp && Math.floor(Date.now() / 1000) > verifiedToken.exp)
+    !_verifiedToken ||
+    (_verifiedToken.exp && Math.floor(Date.now() / 1000) > _verifiedToken.exp)
   ) {
     throw new CustomError(ERROR_CODES.AUTH_TOKEN_EXPIRED);
   }
-  return verifiedToken;
+  return _verifiedToken;
 };
 
 const validateAuthToken = (token) => {
   if (!token) throw new CustomError(ERROR_CODES.AUTH_TOKEN_EXPIRED);
-  const [bearer, authToken] = token.split(' ');
-  if (bearer !== 'Bearer' || !authToken) return null;
-  return authToken;
+  const [_bearer, _authToken] = token.split(' ');
+  if (_bearer !== 'Bearer' || !_authToken) return null;
+  return _authToken;
 };
 
 const authMiddleware = (roles) => async (req, res, next) => {
   try {
-    const token = validateAuthToken(req.headers.authorization);
-    if (!token)
+    const _token = validateAuthToken(req.headers.authorization);
+    if (!_token)
       return res
         .status(401)
         .send({ code: 401, message: 'Authorization header is required' });
 
-    const verifiedToken = await verifyAuthToken(token);
-    const userTokens = await UserTokenDal.findAll({
-      where: { userId: verifiedToken.id },
+    const _verifiedToken = await verifyAuthToken(_token);
+    const _userTokens = await UserTokenDal.findAll({
+      where: { userId: _verifiedToken.id },
     });
 
-    if (!userTokens.some((item) => item.token === token))
+    if (!_userTokens.some((item) => item.token === _token))
       return res
         .status(401)
         .send({ code: 401, message: 'Authorization header is invalid' });
 
-    const user = await UserDal.findOne({ where: { id: verifiedToken.id } });
-    if (!user?.isActive || !roles.includes(user.role))
+    const _user = await UserDal.findOne({ where: { id: _verifiedToken.id } });
+    if (!_user?.isActive || !roles.includes(_user.role))
       throw new CustomError(ERROR_CODES.UNAUTHORISED);
     //if (!user.emailVerified) throw new CustomError(ERROR_CODES.VERIFY_EMAIL);
 
-    delete user.password;
-    req.headers.loggedUser = user;
-    req.headers.token = token;
+    delete _user.password;
+    req.headers.loggedUser = _user;
+    req.headers.token = _token;
     return next();
   } catch (error) {
     if (error?.expiredAt)

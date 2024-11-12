@@ -5,103 +5,103 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const { logger } = require('../utils/logger');
 
-const s3 = new AWS.S3({
+const _s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
-const uploads = multer({
+const _uploads = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 1 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png/;
-    const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
+  fileFilter: (_req, _file, _cb) => {
+    const _filetypes = /jpeg|jpg|png/;
+    const _mimetype = _filetypes.test(_file.mimetype);
+    const _extname = _filetypes.test(
+      path.extname(_file.originalname).toLowerCase()
     );
-    if (mimetype && extname) {
-      return cb(null, true);
+    if (_mimetype && _extname) {
+      return _cb(null, true);
     }
-    return cb(new Error('Only .jpeg, .jpg, and .png files are allowed!'));
+    return _cb(new Error('Only .jpeg, .jpg, and .png files are allowed!'));
   },
 });
 
-const uploadFileToS3 = (file) => {
-  const params = {
+const uploadFileToS3 = (_file) => {
+  const _params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: `${Date.now()}_9e550abf5adb_${file.originalname}`,
-    Body: file.buffer,
-    ContentType: file.mimetype,
+    Key: `${Date.now()}_9e550abf5adb_${_file.originalname}`,
+    Body: _file.buffer,
+    ContentType: _file.mimetype,
   };
 
-  return new Promise((resolve, reject) => {
-    s3.upload(params, (err, data) => {
-      if (err) {
-        reject(new Error('File upload failed'));
+  return new Promise((_resolve, _reject) => {
+    _s3.upload(_params, (_error, _data) => {
+      if (_error) {
+        _reject(new Error('File upload failed'));
       } else {
-        resolve(data.Location);
+        _resolve(_data.Location);
       }
     });
   });
 };
 
-const deleteFromS3 = async (url) => {
-  const urlParts = new URL(url);
-  const bucket = urlParts.hostname.split('.')[0];
-  const key = decodeURIComponent(urlParts.pathname.substring(1));
+const deleteFromS3 = async (_url) => {
+  const _urlParts = new URL(_url);
+  const _bucket = _urlParts.hostname.split('.')[0];
+  const _key = decodeURIComponent(_urlParts.pathname.substring(1));
 
-  const deleteParams = {
-    Bucket: bucket,
-    Key: key,
+  const _deleteParams = {
+    Bucket: _bucket,
+    Key: _key,
   };
 
-  await s3.deleteObject(deleteParams).promise();
+  await _s3.deleteObject(_deleteParams).promise();
   return true;
 };
 
-const uploadSvgToS3 = async (params) => {
-  const { title } = params;
-  const folderPath = path.join(__dirname, '../data/icons');
-  let fileName = `${title.replace(/\s+/g, '').toLowerCase()}.svg`;
-  const filePath = path.join(folderPath, fileName);
+const uploadSvgToS3 = async (_params) => {
+  const { title } = _params;
+  const _folderPath = path.join(__dirname, '../data/icons');
+  let _fileName = `${title.replace(/\s+/g, '').toLowerCase()}.svg`;
+  const _filePath = path.join(_folderPath, _fileName);
   // Check if file exists
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(_filePath)) {
     return null;
   }
-  const fileContent = fs.readFileSync(filePath);
-  const param = {
+  const _fileContent = fs.readFileSync(_filePath);
+  const _param = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: `icons/${fileName}`,
-    Body: fileContent,
+    Key: `icons/${_fileName}`,
+    Body: _fileContent,
     ContentType: 'image/svg+xml',
   };
   try {
-    const data = await s3.upload(param).promise();
-    return data.Location;
-  } catch (err) {
-    logger.error(err.message);
-    throw err;
+    const _data = await _s3.upload(_param).promise();
+    return _data.Location;
+  } catch (_error) {
+    logger.error(_error.message);
+    throw _error;
   }
 };
 
-const uploadToS3 = async (filePath, fileName) => {
-  const fileContent = fs.readFileSync(filePath);
+const uploadToS3 = async (_filePath, _fileName) => {
+  const _fileContent = fs.readFileSync(_filePath);
 
-  const params = {
+  const _params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: `icons/${fileName}`, // File name you want to save as in S3
-    Body: fileContent,
+    Key: `icons/${_fileName}`, // File name you want to save as in S3
+    Body: _fileContent,
     ContentType: 'image/svg+xml',
   };
 
   // Uploading files to the bucket
-  const data = await s3.upload(params).promise();
-  return data.Location; // The URL of the uploaded file
+  const _data = await _s3.upload(_params).promise();
+  return _data.Location; // The URL of the uploaded file
 };
 
 module.exports = {
-  uploads,
+  uploads: _uploads,
   uploadFileToS3,
   deleteFromS3,
   uploadSvgToS3,

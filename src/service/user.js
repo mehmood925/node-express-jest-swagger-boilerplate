@@ -10,7 +10,7 @@ const CONSTANTS = require('../constant/constant');
 const RedisCache = require('../utils/cache');
 const { logger } = require('../utils/logger');
 const { generateTokens } = require('../middleware/auth');
-const { generateRandomCode } = require('../utils/randomNumberGeneration');
+const { generateRandomCode } = require('../utils/randomNumber');
 
 const _complexityOptions = {
   min: 8,
@@ -45,8 +45,8 @@ class Service {
     if (_pass.error) {
       throw new CustomError(ERROR_CODES.PASS_RULES_ERROR);
     }
-    const verificationCode = generateRandomCode();
-    const verificationExpiry = new Date(
+    const _verificationCode = generateRandomCode();
+    const _verificationExpiry = new Date(
       Date.now() +
         CONSTANTS.EMAIL_CONFIRMATION_CODE_EXPIRY_TIME_IN_SECONDS * 1000
     ).getTime();
@@ -56,40 +56,40 @@ class Service {
       username: params.username,
       email: params.email,
       password: bcrypt.hashSync(params.password, bcrypt.genSaltSync(2)),
-      email_verification_otp: verificationCode,
-      email_verification_otp_expiry: verificationExpiry,
+      email_verification_otp: _verificationCode,
+      email_verification_otp_expiry: _verificationExpiry,
       email_verified: false,
       role: CONSTANTS.ADMIN,
       phone: params.phone,
     };
+
     let _userId = await UserDal.create(_user);
-    console.log('=++++++===++++===    1');
+
     RedisCache.set(CONSTANTS.USER_EMAIL_OTP_ATTEMPTS, _userId, 1);
-    console.log('=++++++===++++===    2');
 
     Service.sendEmailVerificationCode({
       email: params.email,
-      verificationCode,
+      _verificationCode,
     });
-    console.log('=++++++===++++===    3');
+
     const { accessToken, refreshToken } = generateTokens({
       id: _userId,
       email: _user.email,
       role: _user.role,
     });
-    console.log('=++++++===++++===    4');
+
     await UserTokenDal.create({
       userId: _userId,
       token: accessToken,
     });
-    console.log('=++++++===++++===    5');
+
     RedisCache.setWithExpiry(
       CONSTANTS.USER_REFRESH_TOKENS,
       _userId,
       refreshToken,
       CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
     );
-    console.log('=++++++===++++===    6');
+
     return { accessToken, refreshToken, verificationExpiry, userId: _userId };
   }
 
@@ -102,30 +102,35 @@ class Service {
   }
 
   static async login(params) {
-    const profile = await UserDal.findOne({ where: { email: params.email } });
-    if (!profile) {
+    const _profile = await UserDal.findOne({ where: { email: params.email } });
+    if (!_profile) {
       throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);
     }
 
     // if (profile.role !== CONSTANTS.USER) {
     //   throw new CustomError(ERROR_CODES.UNAUTHORISED);
     // }
-    await Service.processLoginValidations(params, profile);
+
+    await Service.processLoginValidations(params, _profile);
+
     const { accessToken, refreshToken } = generateTokens({
-      id: profile.id,
-      email: profile.email,
-      role: profile.role,
+      id: _profile.id,
+      email: _profile.email,
+      role: _profile.role,
     });
+
     await UserTokenDal.create({
-      userId: profile.id,
+      userId: _profile.id,
       token: accessToken,
     });
+
     RedisCache.setWithExpiry(
       CONSTANTS.USER_REFRESH_TOKENS,
-      profile.id,
+      _profile.id,
       refreshToken,
       CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
     );
+
     return {
       accessToken,
       refreshToken,
@@ -133,11 +138,11 @@ class Service {
   }
 
   static async getProfile(params) {
-    const _user = await UserDal.findOne({
+    const _response = await UserDal.findOne({
       where: { id: params.id },
       attributes: { exclude: ['password'] },
     });
-    return _user;
+    return _response;
   }
 
   static async processLoginValidations(params, profile) {

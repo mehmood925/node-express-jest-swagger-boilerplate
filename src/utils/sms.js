@@ -8,22 +8,22 @@ const twilio = require('twilio');
 
 async function getSecretValue() {
   try {
-    const data = await secretsManager
-      .getSecretValue({ SecretId: secretName })
+    const _data = await secretsManager
+      .getSecretValue({ SecretId: _secretName })
       .promise();
-    if ('SecretString' in data) {
-      return JSON.parse(data.SecretString);
+    if ('SecretString' in _data) {
+      return JSON.parse(_data.SecretString);
     } else {
-      let buff = Buffer.from(data.SecretBinary, 'base64');
-      return buff.toString('ascii');
+      let _buff = Buffer.from(_data.SecretBinary, 'base64');
+      return _buff.toString('ascii');
     }
-  } catch (err) {
-    console.error(`Error retrieving secret ${secretName}:`, err);
-    throw new Error(err?.message || 'Error in getSecretValue');
+  } catch (_error) {
+    console.error(`Error retrieving secret ${_secretName}:`, _error);
+    throw new Error(_error?.message || 'Error in getSecretValue');
   }
 }
 
-const secretName = 'TwilioCredentials';
+const _secretName = 'TwilioCredentials';
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -31,39 +31,39 @@ AWS.config.update({
   region: process.env.AWS_REGION,
 });
 
-const sns = new AWS.SNS();
+const _sns = new AWS.SNS();
 
-const sendSnsSms = async (phoneNumber, message) => {
+const sendSnsSms = async (_phoneNumber, _message) => {
   try {
-    const params = {
-      Message: message,
-      PhoneNumber: phoneNumber,
+    const _params = {
+      Message: _message,
+      PhoneNumber: _phoneNumber,
     };
-    const data = await sns.publish(params).promise();
-    return data;
-  } catch (error) {
-    console.error(`Error sending message to ${phoneNumber}: ${error}`);
-    throw error;
+    const _data = await _sns.publish(_params).promise();
+    return _data;
+  } catch (_error) {
+    console.error(`Error sending message to ${_phoneNumber}: ${_error}`);
+    throw _error;
   }
 };
 
-const sendTwilioSms = async (phoneNumber, message) => {
+const sendTwilioSms = async (_phoneNumber, _message) => {
   try {
-    const data = await getSecretValue();
+    const _data = await getSecretValue();
 
-    const accountSid = data[awsSMSidKey];
-    const authToken = data[awsSMAuthTokenKey];
-    const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
-    const client = twilio(accountSid, authToken);
+    const _accountSid = _data[awsSMSidKey];
+    const _authToken = _data[awsSMAuthTokenKey];
+    const _twilioNumber = process.env.TWILIO_PHONE_NUMBER;
+    const _client = twilio(_accountSid, _authToken);
 
-    const _message = await client.messages.create({
-      body: message,
-      from: twilioNumber,
-      to: phoneNumber,
+    const _message = await _client.messages.create({
+      body: _message,
+      from: _twilioNumber,
+      to: _phoneNumber,
     });
     return _message;
-  } catch (error) {
-    console.error('Failed to send message:', error);
+  } catch (_error) {
+    console.error('Failed to send message:', _error);
   }
 };
 

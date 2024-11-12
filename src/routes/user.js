@@ -1,20 +1,20 @@
 const express = require('express');
-const router = express.Router();
-const controller = require('../controllers/user');
+const _router = express.Router();
+const _controller = require('../controllers/user');
 const validationMiddleware = require('../middleware/validation');
 const valdations = require('../validations/user');
 const { authMiddleware } = require('../middleware/auth');
 const CONSTANTS = require('../constant/constant');
-router.post(
+_router.post(
   '/register',
   validationMiddleware(valdations.register),
-  controller.register
+  _controller.register
 );
-router.post('/login', validationMiddleware(valdations.login), controller.login);
-router.get(
+_router.post('/login', validationMiddleware(valdations.login), _controller.login);
+_router.get(
   '/getProfile',
   authMiddleware([CONSTANTS.ADMIN]),
-  controller.getProfile
+  _controller.getProfile
 );
 // router.get("/verifyResetPasswordToken", controller.verifyToken);
 // router.patch(
