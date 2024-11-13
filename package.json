@@ -6,9 +6,6 @@
   "scripts": {
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
-    "test": "jest --verbose",
-    "test:watch": "jest --watchAll",
-    "test:coverage": "jest --coverage",
     "start": "env DEBUG=provider:* node ./src/index.js",
     "dev": "nodemon --trace-warnings --exec 'env DEBUG=provider:* node' ./src/index.js"
   },
