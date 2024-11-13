@@ -62,11 +62,11 @@ const authMiddleware = (_roles) => async (_req, _res, _next) => {
   }
 };
 
-const generateTokens = (payload) => ({
-  accessToken: jwt.sign(payload, process.env.JWT_SECRET, {
+const generateTokens = (_payload) => ({
+  accessToken: _jwt.sign(_payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRATION,
   }),
-  refreshToken: jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
+  refreshToken: _jwt.sign(_payload, process.env.JWT_REFRESH_SECRET, {
     expiresIn: process.env.JWT_REFRESH_EXPIRATION,
   }),
 });

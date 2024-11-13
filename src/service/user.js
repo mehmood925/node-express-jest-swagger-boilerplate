@@ -90,14 +90,14 @@ class Service {
       CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
     );
 
-    return { accessToken, refreshToken, verificationExpiry, userId: _userId };
+    return { accessToken, refreshToken, _verificationExpiry, userId: _userId };
   }
 
-  static sendEmailVerificationCode(params) {
+  static sendEmailVerificationCode(_params) {
     // EmailService.sendEmail({
-    //   email: params.email,
+    //   email: _params.email,
     //   subject: CONSTANTS.EMAIL_VERIFICATION_SUBJECT,
-    //   html: EmailTemplate.verificationEmailTemplate(params.verificationCode),
+    //   html: EmailTemplate.verificationEmailTemplate(_params.verificationCode),
     // });
   }
 
