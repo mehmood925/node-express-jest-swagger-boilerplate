@@ -5,7 +5,6 @@ const { logger } = require('./logger');
 class EmailService {
   static async sendEmail(_params) {
     try {
-      console.log({_params})
       const _transporter = _nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
@@ -26,11 +25,10 @@ class EmailService {
         _mailOptions.text = _params.body;
       }
 
-      const _response = await _transporter.sendMail(_mailOptions);
-      console.log({_response})
+      await _transporter.sendMail(_mailOptions);
       return true;
     } catch (_error) {
-      logger.error('Error in Email Service');
+      logger.info(`=====> ERROR EMAIL SERVICE`);
       logger.error(_error.message);
       return _error;
     }

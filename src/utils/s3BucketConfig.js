@@ -80,6 +80,7 @@ const uploadSvgToS3 = async (_params) => {
     const _data = await _s3.upload(_param).promise();
     return _data.Location;
   } catch (_error) {
+    logger.info(`=====> ERROR S3 SERVICE`);
     logger.error(_error.message);
     throw _error;
   }

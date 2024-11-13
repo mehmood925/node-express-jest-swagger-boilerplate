@@ -10,6 +10,7 @@ class CronClass {
         logger.info('CRON JOB STARTED');
         logger.info('CRON JOB COMPLETED');
       } catch (_error) {
+        logger.info(`=====> ERROR CRON`);
         logger.error(_error.message);
       }
     });

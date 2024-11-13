@@ -52,6 +52,7 @@ const authMiddleware = (_roles) => async (_req, _res, _next) => {
     _req.headers.token = _token;
     return _next();
   } catch (_error) {
+    logger.info(`=====> ERROR AUTH MIDDLEWARE`);
     if (_error?.expiredAt)
       return _res.status(401).send({
         code: 401,

@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const secretsManager = new AWS.SecretsManager();
 const awsSMSidKey = 'TwilioAccountSID';
 const awsSMAuthTokenKey = 'TwilioAuthToken';
-
+const { logger } = require('./logger');
 const twilio = require('twilio');
 
 async function getSecretValue() {
@@ -18,7 +18,9 @@ async function getSecretValue() {
       return _buff.toString('ascii');
     }
   } catch (_error) {
-    console.error(`Error retrieving secret ${_secretName}:`, _error);
+    logger.info(`=====> ERROR GET SECRET VALUES`);
+    logger.info(`Error retrieving secret ${_secretName}:`);
+    logger.info(_error.message);
     throw new Error(_error?.message || 'Error in getSecretValue');
   }
 }
@@ -42,7 +44,9 @@ const sendSnsSms = async (_phoneNumber, _message) => {
     const _data = await _sns.publish(_params).promise();
     return _data;
   } catch (_error) {
-    console.error(`Error sending message to ${_phoneNumber}: ${_error}`);
+    logger.info(`=====> ERROR SEND SNS SMS`);
+    logger.info(`Error sending message to ${_phoneNumber}`);
+    logger.info(_error.message);
     throw _error;
   }
 };
@@ -63,7 +67,9 @@ const sendTwilioSms = async (_phoneNumber, _message) => {
     });
     return _message;
   } catch (_error) {
-    console.error('Failed to send message:', _error);
+    logger.info(`=====> ERROR SEND TWILIO SMS`);
+    logger.info('Failed to send message');
+    logger.info(_error.messge);
   }
 };
 

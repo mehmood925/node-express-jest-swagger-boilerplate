@@ -1,13 +1,13 @@
-const bcrypt = require('bcrypt');
-const passCom = require('joi-password-complexity');
+const _bcrypt = require('bcrypt');
+const _passCom = require('joi-password-complexity');
 const { v4: uuidv4 } = require('uuid');
-const ERROR_CODES = require('../constant/error-messages');
-const CustomError = require('../utils/error');
+const _ERROR_CODES = require('../constant/error-messages');
+const _CustomError = require('../utils/error');
 const { UserDal, UserTokenDal } = require('../dal');
 const { EmailService } = require('../utils/email');
-const EmailTemplate = require('../utils/emailTemplate');
-const CONSTANTS = require('../constant/constant');
-const RedisCache = require('../utils/cache');
+const _EmailTemplate = require('../utils/emailTemplate');
+const _CONSTANTS = require('../constant/constant');
+const _RedisCache = require('../utils/cache');
 const { logger } = require('../utils/logger');
 const { generateTokens } = require('../middleware/auth');
 const { generateRandomCode } = require('../utils/randomNumber');
@@ -22,54 +22,54 @@ const _complexityOptions = {
 };
 
 class Service {
-  static async register(params) {
+  static async register(_params) {
     const _existingEmail = await UserDal.findOne({
-      where: { email: params.email },
+      where: { email: _params.email },
     });
     if (_existingEmail) {
-      throw new CustomError(ERROR_CODES.USER_ALREADY_EXISTS);
+      throw new _CustomError(_ERROR_CODES.USER_ALREADY_EXISTS);
     }
     const _existingUsername = await UserDal.findOne({
-      where: { username: params.username },
+      where: { username: _params.username },
     });
     if (_existingUsername) {
-      throw new CustomError(ERROR_CODES.USERNAME_ALREADY_EXISTS);
+      throw new _CustomError(_ERROR_CODES.USERNAME_ALREADY_EXISTS);
     }
     const _existingPhone = await UserDal.findOne({
-      where: { phone: params.phone },
+      where: { phone: _params.phone },
     });
     if (_existingPhone) {
-      throw new CustomError(ERROR_CODES.PHONE_ALREADY_EXISTS);
+      throw new _CustomError(_ERROR_CODES.PHONE_ALREADY_EXISTS);
     }
-    const _pass = passCom(_complexityOptions).validate(params.password);
+    const _pass = _passCom(_complexityOptions).validate(_params.password);
     if (_pass.error) {
-      throw new CustomError(ERROR_CODES.PASS_RULES_ERROR);
+      throw new _CustomError(_ERROR_CODES.PASS_RULES_ERROR);
     }
     const _verificationCode = generateRandomCode();
     const _verificationExpiry = new Date(
       Date.now() +
-        CONSTANTS.EMAIL_CONFIRMATION_CODE_EXPIRY_TIME_IN_SECONDS * 1000
+        _CONSTANTS.EMAIL_CONFIRMATION_CODE_EXPIRY_TIME_IN_SECONDS * 1000
     ).getTime();
     const _user = {
-      firstName: params.firstName,
-      lastName: params.lastName,
-      username: params.username,
-      email: params.email,
-      password: bcrypt.hashSync(params.password, bcrypt.genSaltSync(2)),
+      firstName: _params.firstName,
+      lastName: _params.lastName,
+      username: _params.username,
+      email: _params.email,
+      password: _bcrypt.hashSync(_params.password, _bcrypt.genSaltSync(10)),
       email_verification_otp: _verificationCode,
       email_verification_otp_expiry: _verificationExpiry,
       email_verified: false,
-      role: CONSTANTS.ADMIN,
-      phone: params.phone,
+      role: _CONSTANTS.ADMIN,
+      phone: _params.phone,
     };
 
     let _userId = await UserDal.create(_user);
 
-    RedisCache.set(CONSTANTS.USER_EMAIL_OTP_ATTEMPTS, _userId, 1);
+    _RedisCache.set(_CONSTANTS.USER_EMAIL_OTP_ATTEMPTS, _userId, 1);
 
     Service.sendEmailVerificationCode({
-      email: params.email,
-      _verificationCode,
+      email: _params.email,
+      verificationCode: _verificationCode,
     });
 
     const { accessToken, refreshToken } = generateTokens({
@@ -83,11 +83,11 @@ class Service {
       token: accessToken,
     });
 
-    RedisCache.setWithExpiry(
-      CONSTANTS.USER_REFRESH_TOKENS,
+    _RedisCache.setWithExpiry(
+      _CONSTANTS.USER_REFRESH_TOKENS,
       _userId,
       refreshToken,
-      CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
+      _CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
     );
 
     return { accessToken, refreshToken, _verificationExpiry, userId: _userId };
@@ -101,17 +101,17 @@ class Service {
     // });
   }
 
-  static async login(params) {
-    const _profile = await UserDal.findOne({ where: { email: params.email } });
+  static async login(_params) {
+    const _profile = await UserDal.findOne({ where: { email: _params.email } });
     if (!_profile) {
-      throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);
+      throw new _CustomError(_ERROR_CODES.INVALID_EMAIL_PASSWORD);
     }
 
     // if (profile.role !== CONSTANTS.USER) {
     //   throw new CustomError(ERROR_CODES.UNAUTHORISED);
     // }
 
-    await Service.processLoginValidations(params, _profile);
+    await Service.processLoginValidations(_params, _profile);
 
     const { accessToken, refreshToken } = generateTokens({
       id: _profile.id,
@@ -124,11 +124,11 @@ class Service {
       token: accessToken,
     });
 
-    RedisCache.setWithExpiry(
-      CONSTANTS.USER_REFRESH_TOKENS,
+    _RedisCache.setWithExpiry(
+      _CONSTANTS.USER_REFRESH_TOKENS,
       _profile.id,
       refreshToken,
-      CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
+      _CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
     );
 
     return {
@@ -137,17 +137,17 @@ class Service {
     };
   }
 
-  static async getProfile(params) {
+  static async getProfile(_params) {
     const _response = await UserDal.findOne({
-      where: { id: params.id },
+      where: { id: _params.id },
       attributes: { exclude: ['password'] },
     });
     return _response;
   }
 
-  static async processLoginValidations(params, profile) {
-    if (!(await bcrypt.compare(params.password, profile.password))) {
-      throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);
+  static async processLoginValidations(_params, _profile) {
+    if (!(await _bcrypt.compare(_params.password, _profile.password))) {
+      throw new _CustomError(_ERROR_CODES.INVALID_EMAIL_PASSWORD);
     }
     // if (!profile.emailVerified) {
     //   throw new CustomError(ERROR_CODES.VERIFY_EMAIL);
