@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
+const mongoose = require('mongoose');
 const { setRouter } = require("./routes/api");
 const { globalErrorHandler } = require("./utils/response");
 
@@ -37,19 +38,22 @@ if (process.env.ENV === "development") {
 /////////////// SET PUBLIC ROUTER ////////////////
 setRouter(app);
 
-/////// GLOBAL ERROR LANDLER AS MIDDLEWARE //////
+/////// GLOBAL ERROR HANDLER AS MIDDLEWARE ///////
 app.use((err, req, res, next) => globalErrorHandler(err, req, res, next));
 
-////////////// EXPRESS APP SERVER ///////////////
-app.server.listen(process.env.PORT || 3000, () => {
-  console.log(
-    `Started server on => http://localhost:${app.server.address().port}`
-  );
-  console.log(
-    `Docs available on => http://localhost:${
-      app.server.address().port
-    }/api-docs`
-  );
+/////////////// START SERVER INDEPENDENTLY ///////////////
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
 
-module.exports = { app };
+////////////// MONGODB CONNECTION //////////////////
+const uri = process.env.MONGODB_URI;
+
+mongoose.connect(uri, {})
+  .then(() => {
+    console.log('Connected successfully to MongoDB');
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+});

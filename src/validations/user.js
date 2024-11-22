@@ -2,7 +2,6 @@ const Joi = require('joi');
 
 module.exports.register = Joi.object({
   email: Joi.string().required(),
-  companyId: Joi.number().required(),
   password: Joi.string().required(),
 });
 

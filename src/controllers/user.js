@@ -1,12 +1,12 @@
-const { AdminService } = require("../service/admin");
+const service = require("../service/user");
 const { responseHandler } = require("../utils/response");
-class AdminController {
+class UserController {
   static async register(req, res, next) {
     try {
-      const result = await AdminService.register(req.body);
+      const _response = await service.register(req.body);
       return responseHandler({
         response: res,
-        result,
+        result: _response,
       });
     } catch (error) {
       next(error);
@@ -15,7 +15,7 @@ class AdminController {
   
   static async login(req, res, next) {
     try {
-      const result = await AdminService.login(req.body);
+      const result = await service.login(req.body);
       return responseHandler({
         response: res,
         result,
@@ -27,7 +27,7 @@ class AdminController {
   
   static async getProfile(req, res, next) {
     try {
-      const result = await AdminService.getProfile(req.loggedUser);
+      const result = await service.getProfile(req.loggedUser);
       return responseHandler({
         response: res,
         result,
@@ -39,7 +39,7 @@ class AdminController {
 
   static async verifyToken(req, res, next) {
     try {
-      const result = await AdminService.verifyToken({token: req.query.token});
+      const result = await service.verifyToken({token: req.query.token});
       return responseHandler({
         response: res,
         result,
@@ -52,7 +52,7 @@ class AdminController {
   static async updatePassword(req, res, next) {
     try {
       req.body.loggedUser = req.loggedUser;
-      const result = await AdminService.updatePassword(req.body);
+      const result = await service.updatePassword(req.body);
       return responseHandler({
         response: res,
         result,
@@ -65,7 +65,7 @@ class AdminController {
   static async forgetPassword(req, res, next) {
     try {
       req.body.loggedUser = req.loggedUser;
-      const result = await AdminService.forgetPassword(req.body);
+      const result = await service.forgetPassword(req.body);
       return responseHandler({
         response: res,
         result,
@@ -78,7 +78,7 @@ class AdminController {
   static async resetPassword(req, res, next) {
     try {
       req.body.loggedUser = req.loggedUser;
-      const result = await AdminService.resetPassword(req.body);
+      const result = await service.resetPassword(req.body);
       return responseHandler({
         response: res,
         result,
@@ -89,4 +89,4 @@ class AdminController {
   }
 }
 
-module.exports = { AdminController };
+module.exports = UserController;

@@ -1,12 +1,21 @@
-require("dotenv").config();
-const { Sequelize } = require("sequelize");
+const { MongoClient } = require('mongodb');
 
-const sequelize = new Sequelize({
-  dialect: 'postgres',
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-});
+const uri = "mongodb+srv://beta-user:cr1vVwuAhX1unaJK@cluster0.c1tbi1c.mongodb.net/test";
+const client = new MongoClient(uri);
 
-module.exports = { sequelize };
+async function run() {
+  try {
+    const database = client.db('dnotifier');
+    const collection = database.collection('contracts');
+    const query = { title: 'Back to the Future' };
+    
+    // Example: Finding one document that matches the query
+    const result = await collection.findOne(query);
+    console.log(result);
+  } finally {
+    // Ensure the client is closed when the operation is complete
+    await client.close();
+  }
+}
+
+run().catch(console.dir);
