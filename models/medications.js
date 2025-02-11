@@ -1,43 +1,33 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const UserModel = sequelize.define('users', {
+const MeedicationsModel = sequelize.define('medications', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  firstName: {
+  userId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+  },
+  name: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  lastName: {
+  dosage: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  username: {
-    type: Sequelize.STRING(255),
-    unique: true,
-    allowNull: false,
-  },
-  email: {
-    type: Sequelize.STRING(255),
-    unique: true,
-    allowNull: false,
-  },
-  password: {
+  frequency: {
     type: Sequelize.STRING(255),
     allowNull: false,
-  },
-  phone: {
-    type: Sequelize.STRING(15),
-  },
-  role: {
-    type: Sequelize.ENUM('user', 'admin'),
-    allowNull: false,
-    defaultValue: 'user',
   },
 });
 
-module.exports = { UserModel };
+module.exports = { MeedicationsModel };

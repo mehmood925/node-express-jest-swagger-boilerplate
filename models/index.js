@@ -1,16 +1,38 @@
 const { UserModel } = require('./users');
-const { UserTokenModel } = require('./userTokens');
+const { AppointmentsModel } = require('./appointments');
+const { MeedicationsModel } = require('./medications');
+const { HealthLogsModel } = require('./healthLogs');
 
-UserModel.hasMany(UserTokenModel, {
-  as: 'users_userTokens',
+UserModel.hasMany(AppointmentsModel, {
+  as: 'users_appointments',
   foreignKey: 'userId',
 });
-UserTokenModel.belongsTo(UserModel, {
-  as: 'userTokens_users',
+AppointmentsModel.belongsTo(UserModel, {
+  as: 'appointments_user',
+  foreignKey: 'userId',
+});
+
+UserModel.hasMany(HealthLogsModel, {
+  as: 'users_healthlogs',
+  foreignKey: 'userId',
+});
+HealthLogsModel.belongsTo(UserModel, {
+  as: 'healthlogs_user',
+  foreignKey: 'userId',
+});
+
+UserModel.hasMany(MeedicationsModel, {
+  as: 'users_medications',
+  foreignKey: 'userId',
+});
+MeedicationsModel.belongsTo(UserModel, {
+  as: 'medications_user',
   foreignKey: 'userId',
 });
 
 module.exports = {
-  User: UserModel,
-  UserToken: UserTokenModel,
+  UserModel,
+  AppointmentsModel,
+  MeedicationsModel,
+  HealthLogsModel,
 };

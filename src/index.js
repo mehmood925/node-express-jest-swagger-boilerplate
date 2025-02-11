@@ -45,7 +45,7 @@ _app.use((_err, _req, _res, _next) =>
 );
 
 // CRON JOBS
-CronClass.sampleCronJob();
+CronClass.cronJob();
 
 /*//////////// EXPRESS APP SERVER /////////////*/
 _app.server.listen(process.env.PORT || 3000, () => {

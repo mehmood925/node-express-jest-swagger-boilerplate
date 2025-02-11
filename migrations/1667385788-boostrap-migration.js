@@ -30,74 +30,13 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
-      emailVerificationOTP: {
-        type: Sequelize.STRING(255),
-      },
-      emailVerificationOTPExpiry: {
-        type: Sequelize.BIGINT,
-      },
-      emailVerified: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
       phone: {
         type: Sequelize.STRING(15),
       },
-      phoneVerificationOTP: {
-        type: Sequelize.STRING(255),
-      },
-      phoneVerificationOTPExpiry: {
-        type: Sequelize.BIGINT,
-      },
-      phoneVerified: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      forgetPasswordOTP: {
-        type: Sequelize.STRING(255),
-      },
-      forgetPasswordOTPExpiry: {
-        type: Sequelize.BIGINT,
-      },
-      forgetPasswordVerified: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-        allowNull: false,
-      },
-      resetPasswordExpiry: {
-        type: Sequelize.BIGINT,
-      },
-      emailNotifications: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      phoneNotifications: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      pushNotifications: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      inAppNotifications: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      isActive: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
       role: {
-        type: Sequelize.ENUM('superAdmin', 'admin', 'agent', 'merchant'),
+        type: Sequelize.ENUM('user', 'admin'),
         allowNull: false,
-        defaultValue: 'merchant',
+        defaultValue: 'user',
       },
       createdAt: {
         allowNull: false,
@@ -111,7 +50,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.createTable('userTokens', {
+    await queryInterface.createTable('medications', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -126,8 +65,93 @@ module.exports = {
           key: 'id',
         },
       },
-      token: {
+      name: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      dosage: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      frequency: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
+    await queryInterface.createTable('appointments', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      doctorName: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      appointmentDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      notes: {
         type: Sequelize.TEXT,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
+    await queryInterface.createTable('healthLogs', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      symptom: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      severity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      loggedAt: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       createdAt: {
@@ -143,14 +167,14 @@ module.exports = {
     });
 
     await queryInterface.addIndex('users', ['email']);
-    await queryInterface.addIndex('userTokens', ['userId']);
-    await queryInterface.addIndex('userTokens', ['token']);
+    await queryInterface.addIndex('medications', ['userId']);
+    await queryInterface.addIndex('appointments', ['userId']);
+    await queryInterface.addIndex('healthLogs', ['userId']);
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('userTokens');
+    await queryInterface.dropTable('healthLogs');
+    await queryInterface.dropTable('appointments');
+    await queryInterface.dropTable('medications');
     await queryInterface.dropTable('users');
-    await queryInterface.sequelize.query(
-      'DROP TYPE IF EXISTS "enum_users_role";'
-    );
   },
 };

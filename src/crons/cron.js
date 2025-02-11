@@ -4,7 +4,7 @@ const _cron = require('node-cron');
 const { logger } = require('../utils/logger');
 
 class CronClass {
-  static async sampleCronJob() {
+  static async cronJob() {
     _cron.schedule('*/30 * * * *', async () => {
       try {
         logger.info('CRON JOB STARTED');
