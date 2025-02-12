@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Appointments = sequelize.define('appointments', {
+const UserTokens = sequelize.define('userTokens', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -16,17 +16,10 @@ const Appointments = sequelize.define('appointments', {
       key: 'id',
     },
   },
-  doctorName: {
-    type: Sequelize.STRING(255),
-    allowNull: false,
-  },
-  appointmentDate: {
-    type: Sequelize.DATE,
-    allowNull: false,
-  },
-  notes: {
+  token: {
     type: Sequelize.TEXT,
+    allowNull: false,
   },
 });
 
-module.exports = { Appointments };
+module.exports = { UserTokens };

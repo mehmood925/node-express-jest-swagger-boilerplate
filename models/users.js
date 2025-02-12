@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const UserModel = sequelize.define('users', {
+const Users = sequelize.define('users', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -33,11 +33,70 @@ const UserModel = sequelize.define('users', {
   phone: {
     type: Sequelize.STRING(15),
   },
-  role: {
-    type: Sequelize.ENUM('user', 'admin'),
+  roleId: {
+    type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 'user',
+    references: {
+      model: 'roles',
+      key: 'id',
+    },
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+  },
+  emailVerificationOTP: {
+    type: Sequelize.NUMBER,
+  },
+  emailVerificationOTPExpiry: {
+    type: Sequelize.STRING,
+  },
+  emailVerified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  phoneVerificationOTP: {
+    type: Sequelize.NUMBER,
+  },
+  phoneVerificationOTPExpiry: {
+    type: Sequelize.NUMBER,
+  },
+  phoneVerified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  inAppNotifications: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
+  pushNotifications: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
+  emailNotifications: {
+      type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
+  smsNotifications: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
+  forgotPasswordOTP: {
+    type: Sequelize.NUMBER,
+  },
+  forgotPasswordOTPExpiry: {
+    type: Sequelize.NUMBER,
+  },
+  forgotPasswordOTPVerified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  resetPasswordExpiry: {
+    type: Sequelize.NUMBER,
+  },
+  timezone: {
+    type: Sequelize.STRING(255),
+    allowNull: false,
   },
 });
 
-module.exports = { UserModel };
+module.exports = { Users };

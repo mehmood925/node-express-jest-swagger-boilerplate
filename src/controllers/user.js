@@ -1,10 +1,10 @@
-const _service = require('../service/user');
+const { UserService } = require('../service/user');
 const { logger } = require('../utils/logger');
 const { responseHandler } = require('../utils/response');
-class Controller {
+class UserController {
   static async register(_req, _res, _next) {
     try {
-      const _response = await _service.register(_req.body);
+      const _response = await UserService.register(_req.body);
       return responseHandler({
         response: _res,
         result: _response,
@@ -18,7 +18,7 @@ class Controller {
 
   static async login(_req, _res, _next) {
     try {
-      const _response = await _service.login(_req.body);
+      const _response = await UserService.login(_req.body);
       return responseHandler({
         response: _res,
         result: _response,
@@ -32,7 +32,7 @@ class Controller {
 
   static async getProfile(_req, _res, _next) {
     try {
-      const _response = await _service.getProfile(_req.headers.loggedUser);
+      const _response = await UserService.getProfile(_req.headers.loggedUser);
       return responseHandler({
         response: _res,
         result: _response,
@@ -59,10 +59,10 @@ class Controller {
   // static async updatePassword(req, res, next) {
   //   try {
   //     req.body.loggedUser = req.loggedUser;
-  //     const result = await AdminService.updatePassword(req.body);
+  //     const _response = await UserService.updatePassword(req.body);
   //     return responseHandler({
   //       response: res,
-  //       result,
+  //       result: _response,
   //     });
   //   } catch (error) {
   //     next(error);
@@ -96,4 +96,4 @@ class Controller {
   // }
 }
 
-module.exports = Controller;
+module.exports = { UserController };

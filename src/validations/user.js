@@ -18,6 +18,7 @@ module.exports.register = Joi.object({
         'Phone number must be in international format, starting with + and followed by the country code and subscriber number.',
     })
     .required(),
+    timezone: safeString.string().htmlStrip().trim().min(1).max(100).required(),  
 });
 
 module.exports.login = Joi.object({

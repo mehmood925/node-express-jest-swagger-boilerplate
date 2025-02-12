@@ -3,7 +3,7 @@ const _passCom = require('joi-password-complexity');
 const { v4: uuidv4 } = require('uuid');
 const _ERROR_CODES = require('../constant/error-messages');
 const _CustomError = require('../utils/error');
-const { UserDal, UserTokenDal } = require('../dal');
+const { Users, UserTokens, Roles } = require('../../models');
 const { EmailService } = require('../utils/email');
 const _EmailTemplate = require('../utils/emailTemplate');
 const _CONSTANTS = require('../constant/constant');
@@ -21,22 +21,28 @@ const _complexityOptions = {
   symbol: 1,
 };
 
-class Service {
+class UserService {
   static async register(_params) {
-    const _existingEmail = await UserDal.findOne({
+    const _existingEmail = await Users.findOne({
       where: { email: _params.email },
+      attributes: ['id', 'email', 'phone', 'username'],
+      raw: true,
     });
     if (_existingEmail) {
       throw new _CustomError(_ERROR_CODES.USER_ALREADY_EXISTS);
     }
-    const _existingUsername = await UserDal.findOne({
+    const _existingUsername = await Users.findOne({
       where: { username: _params.username },
+      attributes: ['id', 'email', 'phone', 'username'],
+      raw: true,
     });
     if (_existingUsername) {
       throw new _CustomError(_ERROR_CODES.USERNAME_ALREADY_EXISTS);
     }
-    const _existingPhone = await UserDal.findOne({
+    const _existingPhone = await Users.findOne({
       where: { phone: _params.phone },
+      attributes: ['id', 'email', 'phone', 'username'],
+      raw: true,
     });
     if (_existingPhone) {
       throw new _CustomError(_ERROR_CODES.PHONE_ALREADY_EXISTS);
@@ -46,24 +52,30 @@ class Service {
       throw new _CustomError(_ERROR_CODES.PASS_RULES_ERROR);
     }
     const _verificationCode = generateRandomCode();
+    console.log({ _verificationCode });
     const _verificationExpiry = new Date(
       Date.now() +
         _CONSTANTS.EMAIL_CONFIRMATION_CODE_EXPIRY_TIME_IN_SECONDS * 1000
     ).getTime();
+    const _role = await Roles.findOne({
+      where: { role: _CONSTANTS.USER },
+      attributes: ['id'],
+    });
     const _user = {
       firstName: _params.firstName,
       lastName: _params.lastName,
       username: _params.username,
       email: _params.email,
       password: _bcrypt.hashSync(_params.password, _bcrypt.genSaltSync(10)),
-      email_verification_otp: _verificationCode,
-      email_verification_otp_expiry: _verificationExpiry,
-      email_verified: false,
-      role: _CONSTANTS.ADMIN,
+      emailVerificationOTP: _verificationCode,
+      emailVerificationOTPExpiry: _verificationExpiry,
+      emailVerified: false,
+      roleId: _role.id,
       phone: _params.phone,
+      timezone: _params.timezone,
     };
 
-    let _userId = await UserDal.create(_user);
+    let _userId = await Users.create(_user);
 
     _RedisCache.set(_CONSTANTS.USER_EMAIL_OTP_ATTEMPTS, _userId, 1);
 
@@ -78,7 +90,7 @@ class Service {
       role: _user.role,
     });
 
-    await UserTokenDal.create({
+    await UserTokens.create({
       userId: _userId,
       token: accessToken,
     });
@@ -119,7 +131,7 @@ class Service {
       role: _profile.role,
     });
 
-    await UserTokenDal.create({
+    await UserTokensDal.create({
       userId: _profile.id,
       token: accessToken,
     });
@@ -289,4 +301,4 @@ class Service {
   //   return true;
   // }
 }
-module.exports = Service;
+module.exports = { UserService };

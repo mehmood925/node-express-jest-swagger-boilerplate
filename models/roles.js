@@ -1,17 +1,17 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Medications = sequelize.define('medications', {
+const Roles = sequelize.define('roles', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  name: {
-    type: Sequelize.STRING(255),
+  role: {
+    type: Sequelize.ENUM('user', 'admin'),
     allowNull: false,
   },
 });
 
-module.exports = { Medications };
+module.exports = { Roles };

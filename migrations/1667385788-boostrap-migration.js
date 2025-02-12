@@ -1,6 +1,29 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('roles', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      role: {
+        type: Sequelize.ENUM('user', 'admin'),
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
     await queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
@@ -33,10 +56,100 @@ module.exports = {
       phone: {
         type: Sequelize.STRING(15),
       },
-      role: {
-        type: Sequelize.ENUM('user', 'admin'),
+      roleId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 'user',
+        references: {
+          model: 'roles',
+          key: 'id',
+        },
+      },
+      isActive: {
+        type: Sequelize.BOOLEAN,
+      },
+      emailVerificationOTP: {
+        type: Sequelize.INTEGER,
+      },
+      emailVerificationOTPExpiry: {
+        type: Sequelize.STRING,
+      },
+      emailVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      phoneVerificationOTP: {
+        type: Sequelize.INTEGER,
+      },
+      phoneVerificationOTPExpiry: {
+        type: Sequelize.INTEGER,
+      },
+      phoneVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      inAppNotifications: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
+      pushNotifications: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
+      emailNotifications: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
+      smsNotifications: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
+      forgotPasswordOTP: {
+        type: Sequelize.INTEGER,
+      },
+      forgotPasswordOTPExpiry: {
+        type: Sequelize.INTEGER,
+      },
+      forgotPasswordOTPVerified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      resetPasswordExpiry: {
+        type: Sequelize.INTEGER,
+      },
+      timezone: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
+    await queryInterface.createTable('userTokens', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      token: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -57,6 +170,52 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
+      name: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
+    await queryInterface.createTable('symptoms', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      symptom: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
+
+    await queryInterface.createTable('userMedications', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -65,9 +224,13 @@ module.exports = {
           key: 'id',
         },
       },
-      name: {
-        type: Sequelize.STRING(255),
+      medicationId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'medications',
+          key: 'id',
+        },
       },
       dosage: {
         type: Sequelize.STRING(255),
@@ -76,6 +239,17 @@ module.exports = {
       frequency: {
         type: Sequelize.STRING(255),
         allowNull: false,
+      },
+      quantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      reminder: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+      },
+      reminderSchedule: {
+        type: Sequelize.JSONB,
       },
       createdAt: {
         allowNull: false,
@@ -127,7 +301,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.createTable('healthLogs', {
+    await queryInterface.createTable('userSymptoms', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -142,9 +316,13 @@ module.exports = {
           key: 'id',
         },
       },
-      symptom: {
-        type: Sequelize.STRING(255),
+      symptomId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'symptoms',
+          key: 'id',
+        },
       },
       severity: {
         type: Sequelize.INTEGER,
@@ -167,14 +345,21 @@ module.exports = {
     });
 
     await queryInterface.addIndex('users', ['email']);
-    await queryInterface.addIndex('medications', ['userId']);
+    await queryInterface.addIndex('userTokens', ['userId']);
+    await queryInterface.addIndex('medications', ['name']);
+    await queryInterface.addIndex('symptoms', ['symptom']);
+    await queryInterface.addIndex('userMedications', ['userId']);
     await queryInterface.addIndex('appointments', ['userId']);
-    await queryInterface.addIndex('healthLogs', ['userId']);
+    await queryInterface.addIndex('userSymptoms', ['userId']);
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('healthLogs');
+    await queryInterface.dropTable('userSymptoms');
     await queryInterface.dropTable('appointments');
+    await queryInterface.dropTable('userMedications');
+    await queryInterface.dropTable('symptoms');
     await queryInterface.dropTable('medications');
+    await queryInterface.dropTable('userTokens');
     await queryInterface.dropTable('users');
+    await queryInterface.dropTable('roles');
   },
 };

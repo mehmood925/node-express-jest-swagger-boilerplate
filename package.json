@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "npx sequelize-cli db:migrate",
+    "seed": "npx sequelize-cli db:seed:all",
     "migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
     "start": "env DEBUG=provider:* node ./src/index.js",
     "dev": "nodemon --trace-warnings --exec 'env DEBUG=provider:* node' ./src/index.js"

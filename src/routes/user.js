@@ -1,32 +1,33 @@
 const _express = require('express');
 const _router = _express.Router();
-const _controller = require('../controllers/user');
+const { UserController } = require('../controllers/user');
 const _validationMiddleware = require('../middleware/validation');
-const _valdations = require('../validations/user');
+const _userValdations = require('../validations/user');
 const { authMiddleware } = require('../middleware/auth');
 const _CONSTANTS = require('../constant/constant');
 _router.post(
   '/register',
-  _validationMiddleware(_valdations.register),
-  _controller.register
+  _validationMiddleware(_userValdations.register),
+  UserController.register
 );
 _router.post(
   '/login',
-  _validationMiddleware(_valdations.login),
-  _controller.login
+  _validationMiddleware(_userValdations.login),
+  UserController.login
 );
 _router.get(
   '/getProfile',
-  authMiddleware([_CONSTANTS.ADMIN]),
-  _controller.getProfile
+  authMiddleware([_CONSTANTS.USER]),
+  UserController.getProfile
 );
-// router.get("/verifyResetPasswordToken", controller.verifyToken);
-// router.patch(
-//   "/updatePassword",
+// _router.get("/verifyResetPasswordToken", controller.verifyToken);
+// _router.patch(
+//   '/updatePassword',
 //   authMiddleware,
-//   validationMiddleware(valdations.updatePassword),
-//   controller.updatePassword
+//   _validationMiddleware(_userValdations.updatePassword),
+//   UserController.updatePassword
 // );
+
 // router.post("/forgetPassword", validationMiddleware(valdations.forgetPassword),
 // controller.forgetPassword);
 // router.post("/resetPassword", validationMiddleware(valdations.resetPassword),

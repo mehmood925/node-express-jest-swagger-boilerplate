@@ -1,17 +1,17 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Medications = sequelize.define('medications', {
+const Symptoms = sequelize.define('symptoms', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  name: {
+  symptom: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
 });
 
-module.exports = { Medications };
+module.exports = { Symptoms };

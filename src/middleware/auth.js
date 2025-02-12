@@ -2,8 +2,8 @@ require('dotenv').config();
 const _jwt = require('jsonwebtoken');
 const _ERROR_CODES = require('../constant/error-messages');
 const _CustomError = require('../utils/error');
-const { UserDal, UserTokenDal } = require('../dal/index');
-
+const { Users, UserTokens } = require('../../models');
+const { logger } = require('../utils/logger');
 const verifyAuthToken = async (_token) => {
   const _verifiedToken = _jwt.verify(_token, process.env.JWT_SECRET, {
     algorithms: ['HS256'],
@@ -33,16 +33,22 @@ const authMiddleware = (_roles) => async (_req, _res, _next) => {
         .send({ code: 401, message: 'Authorization header is required' });
 
     const _verifiedToken = await verifyAuthToken(_token);
-    const _userTokens = await UserTokenDal.findAll({
+    const _userTokens = await UserTokens.findAll({
       where: { userId: _verifiedToken.id },
+      adttribures: ['token'],
+      raw: true,
     });
-
     if (!_userTokens.some((_item) => _item.token === _token))
       return _res
         .status(401)
         .send({ code: 401, message: 'Authorization header is invalid' });
 
-    const _user = await UserDal.findOne({ where: { id: _verifiedToken.id } });
+    const _user = await Users.findOne({
+      where: { id: _verifiedToken.id },
+      attributes: ['id', 'email'],
+      raw: true,
+    });
+    console.log({ _user });
     if (!_user?.isActive || !_roles.includes(_user.role))
       throw new _CustomError(_ERROR_CODES.UNAUTHORISED);
     //if (!_user.emailVerified) throw new _CustomError(_ERROR_CODES.VERIFY_EMAIL);
