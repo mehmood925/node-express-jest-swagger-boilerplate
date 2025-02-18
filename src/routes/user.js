@@ -39,4 +39,4 @@ router.post(
   UserController.resetPassword
 );
 
-module.exports = _router;
+module.exports = router;

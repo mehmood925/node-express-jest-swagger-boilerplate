@@ -1,4 +1,4 @@
-const _cron = require('node-cron');
+const cron = require('node-cron');
 // const CustomError = require('../utils/error');
 // const ERROR_CODES = require('../constant/error-messages');
 const { logger } = require('../utils/logger');

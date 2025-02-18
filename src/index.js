@@ -12,7 +12,7 @@ const { CronClass } = require('./crons/cron');
 
 /*///////////////// EXPRESS APP /////////////////*/
 const app = express();
-app.server = http.createServer(_app);
+app.server = http.createServer(app);
 
 /*///////////////// BODY PARSER /////////////////*/
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -48,7 +48,7 @@ CronClass.cronJob();
 /*//////////// EXPRESS APP SERVER /////////////*/
 app.server.listen(process.env.PORT || 3000, () => {
   logger.info(
-    `Started server on => http://localhost:${_app.server.address().port}`
+    `Started server on => http://localhost:${app.server.address().port}`
   );
   logger.info(
     `Docs available on => http://localhost:${
