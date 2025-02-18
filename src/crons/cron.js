@@ -5,13 +5,13 @@ const { logger } = require('../utils/logger');
 
 class CronClass {
   static async cronJob() {
-    _cron.schedule('*/30 * * * *', async () => {
+    cron.schedule('*/30 * * * *', async () => {
       try {
         logger.info('CRON JOB STARTED');
         logger.info('CRON JOB COMPLETED');
-      } catch (_error) {
+      } catch (error) {
         logger.info(`=====> ERROR CRON`);
-        logger.error(_error.message);
+        logger.error(error.message);
       }
     });
   }

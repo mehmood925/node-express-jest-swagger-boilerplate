@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Appointments = sequelize.define('appointments', {
+const Payments = sequelize.define('payments', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -16,44 +16,42 @@ const Appointments = sequelize.define('appointments', {
       key: 'id',
     },
   },
-  title: {
+  subscription_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'subscriptions',
+      key: 'id',
+    },
+  },
+  amount: {
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+  },
+  currency: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  appointment_time: {
-    type: Sequelize.DATE,
-    allowNull: false,
-  },
-  doctor_name: {
+  payment_method: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  location: {
+  transaction_id: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  reason: {
+  apple_transaction_id: {
     type: Sequelize.STRING(255),
-    allowNull: false,
-  },
-  notes: {
-    type: Sequelize.TEXT,
     allowNull: true,
   },
-  notifications_enabled: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: true,
-    allowNull: false,
+  google_order_id: {
+    type: Sequelize.STRING(255),
+    allowNull: true,
   },
   status: {
-    type: Sequelize.ENUM('pending', 'completed', 'cancelled', 'missed', 'rescheduled'),
-    allowNull: false,
-  },
-  is_deleted: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
+    type: Sequelize.ENUM('initiated', 'success'),
     allowNull: false,
   },
 });
 
-module.exports = { Appointments };
+module.exports = { Payments };

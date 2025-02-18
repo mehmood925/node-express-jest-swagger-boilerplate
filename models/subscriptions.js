@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Medications = sequelize.define('medications', {
+const Subscriptions = sequelize.define('subscriptions', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -12,14 +12,22 @@ const Medications = sequelize.define('medications', {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  manufacturer: {
-    type: Sequelize.STRING(255),
-    allowNull: true,
+  type: {
+    type: Sequelize.ENUM('monthly', 'annual'),
+    allowNull: false,
   },
-  strength: {
+  price: {
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+  },
+  currency: {
     type: Sequelize.STRING(255),
-    allowNull: true,
+    allowNull: false,
+  },
+  validity_days: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
   },
 });
 
-module.exports = { Medications };
+module.exports = { Subscriptions };

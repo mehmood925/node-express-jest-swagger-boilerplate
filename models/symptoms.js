@@ -8,7 +8,7 @@ const Symptoms = sequelize.define('symptoms', {
     primaryKey: true,
     allowNull: false,
   },
-  symptom: {
+  title: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },

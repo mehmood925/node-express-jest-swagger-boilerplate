@@ -17,10 +17,12 @@ module.exports = {
     ];
     try {
       const _roles = await queryInterface.sequelize.query(
-        'SELECT * FROM "roles"', { type: queryInterface.sequelize.QueryTypes.SELECT });
-      if(_roles.length === 0) {
+        'SELECT * FROM "roles"',
+        { type: queryInterface.sequelize.QueryTypes.SELECT }
+      );
+      if (_roles.length === 0) {
         await queryInterface.bulkInsert('roles', data, {});
-      } 
+      }
     } catch (error) {
       console.log(error);
     }

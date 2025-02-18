@@ -1,18 +1,18 @@
 const validationMiddleware =
-  (_validationObject, _isGet = false) =>
-  (_req, _res, _next) => {
-    const _body = _isGet ? _req.query : _req.body;
-    const { error } = _validationObject.validate(_body);
+  (validationObject, type = 'body') =>
+  (req, res, next) => {
+    const requestObject = type === 'body' ? req.body : req.query;
+    const { error } = validationObject.validate(requestObject);
     if (error) {
-      let _errMessage = error.details[0].message
+      let errMessage = error.details[0].message
         ? error.details[0].message
         : error.message;
-      _errMessage = _errMessage.replace(/[[\]""]+/g, '');
-      return _res
+      errMessage = errMessage.replace(/[[\]""]+/g, '');
+      return res
         .status(400)
-        .send({ code: 400, message: _errMessage, result: null });
+        .send({ code: 400, message: errMessage, result: null });
     }
-    return _next();
+    return next();
   };
 
 module.exports = validationMiddleware;

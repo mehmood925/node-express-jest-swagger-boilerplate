@@ -1,25 +1,29 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Medications = sequelize.define('medications', {
+const UserAuthProviders = sequelize.define('user_auth_providers', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  title: {
-    type: Sequelize.STRING(255),
+  user_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+  },
+  provider: {
+    type: Sequelize.ENUM('email', 'google', 'apple'),
     allowNull: false,
   },
-  manufacturer: {
-    type: Sequelize.STRING(255),
-    allowNull: true,
-  },
-  strength: {
+  social_id: {
     type: Sequelize.STRING(255),
     allowNull: true,
   },
 });
 
-module.exports = { Medications };
+module.exports = { UserAuthProviders };

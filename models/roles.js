@@ -8,8 +8,8 @@ const Roles = sequelize.define('roles', {
     primaryKey: true,
     allowNull: false,
   },
-  role: {
-    type: Sequelize.ENUM('user', 'admin'),
+  title: {
+    type: Sequelize.STRING(255),
     allowNull: false,
   },
 });

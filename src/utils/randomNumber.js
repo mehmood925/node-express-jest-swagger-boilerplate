@@ -1,12 +1,12 @@
 const crypto = require('crypto');
 
-const generateRandomCode = (_length = 4) => {
-  let _code = '';
-  for (let i = 1; i <= _length; i += 1) {
-    const _randomValue = crypto.randomBytes(1)[0] % 10;
-    _code += _randomValue;
+const generateRandomCode = (length = 4) => {
+  let code = '';
+  for (let i = 1; i <= length; i += 1) {
+    const randomValue = crypto.randomBytes(1)[0] % 10;
+    code += randomValue;
   }
-  return _code;
+  return code;
 };
 
 module.exports = { generateRandomCode };

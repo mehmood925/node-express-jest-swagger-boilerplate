@@ -1,14 +1,14 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const UserTokens = sequelize.define('userTokens', {
+const UserKnownAssociations = sequelize.define('user_known_associations', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  userId: {
+  user_id: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
@@ -16,10 +16,14 @@ const UserTokens = sequelize.define('userTokens', {
       key: 'id',
     },
   },
-  token: {
-    type: Sequelize.TEXT,
+  type: {
+    type: Sequelize.ENUM('allergy', 'condition'),
+    allowNull: false,
+  },
+  value: {
+    type: Sequelize.STRING(255),
     allowNull: false,
   },
 });
 
-module.exports = { UserTokens };
+module.exports = { UserKnownAssociations };

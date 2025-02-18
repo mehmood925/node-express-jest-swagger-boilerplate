@@ -1,25 +1,29 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const Medications = sequelize.define('medications', {
+const UserFirebaseTokens = sequelize.define('user_firebase_tokens', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  title: {
+  user_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+  },
+  device_id: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  manufacturer: {
+  firebase_token_id: {
     type: Sequelize.STRING(255),
-    allowNull: true,
-  },
-  strength: {
-    type: Sequelize.STRING(255),
-    allowNull: true,
+    allowNull: false,
   },
 });
 
-module.exports = { Medications };
+module.exports = { UserFirebaseTokens };

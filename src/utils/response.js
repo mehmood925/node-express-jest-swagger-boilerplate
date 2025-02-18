@@ -1,7 +1,7 @@
 const CustomError = require('./error');
 
-const responseHandler = (_data) => {
-  const { response, message = 'success', result, code = 200 } = _data;
+const responseHandler = (data) => {
+  const { response, message = 'success', result, code = 200 } = data;
   return response.status(code).json({
     code,
     message,
@@ -9,24 +9,24 @@ const responseHandler = (_data) => {
   });
 };
 
-const globalErrorHandler = (_error, _request, _response, _next) => {
-  if (!(_error instanceof CustomError)) {
-    if (_error instanceof Error) {
-      _error = new CustomError({
-        message: _error.message,
+const globalErrorHandler = (error, request, response, next) => {
+  if (!(error instanceof CustomError)) {
+    if (error instanceof Error) {
+      error = new CustomError({
+        message: error.message,
       });
     }
   }
 
-  if (_request?.body?.user) {
-    _request.body.user = null;
+  if (request?.body?.user) {
+    request.body.user = null;
   }
   return responseHandler({
-    response: _response,
-    message: _error.message,
+    response: response,
+    message: error.message,
     result: null,
-    code: _error.code || 500,
-    errors: [_error],
+    code: error.code || 500,
+    errors: [error],
     isSuccess: false,
   });
 };

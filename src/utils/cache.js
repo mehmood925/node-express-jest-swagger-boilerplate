@@ -1,250 +1,201 @@
 require('dotenv').config();
-const _cacheClient = require('async-redis');
+const cacheClient = require('async-redis');
 const { logger } = require('./logger');
 
-const _redisHost = process.env.REDIS_HOST;
-const _redisPassword = process.env.REDIS_PASSWORD;
-const _redisPort = process.env.REDIS_PORT;
+const redisHost = process.env.REDIS_HOST;
+const redisPassword = process.env.REDIS_PASSWORD;
+const redisPort = process.env.REDIS_PORT;
 
-logger.info(`> Redis Host: ${_redisHost}`);
+logger.info(`> Redis Host: ${redisHost}`);
 
 logger.info('* Using only host and port to connect to redis...');
-const _clientOptions = {
-  host: _redisHost,
-  port: _redisPort,
+const clientOptions = {
+  host: redisHost,
+  port: redisPort
 };
-
 if (process.env.ENV === 'development') {
-  _clientOptions.password = _redisPassword;
+  clientOptions.password = redisPassword;
 }
 
-const _client = _cacheClient.createClient(_clientOptions);
+const client = cacheClient.createClient(clientOptions);
 
-_client.on('error', (_error) => {
-  logger.error(_error.message);
+client.on('error', (err) => {
+  logger.error(err.message);
 });
 
-_client.on('ready', () => {
+client.on('ready', () => {
   logger.info('Redis connection successful');
 });
 
 class RedisCache {
-  static set(_moduleName, _key, _value) {
+  static set(moduleName, key, value) {
     try {
-      if (typeof _value !== 'string') {
-        _client.set(_moduleName + _key, JSON.stringify(_value));
+      if (typeof value !== 'string') {
+        client.set(moduleName + key, JSON.stringify(value));
       } else {
-        _client.set(_moduleName + _key, _value);
+        client.set(moduleName + key, value);
       }
       return true;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR SET');
-      logger.info(_error);
+    } catch (error) {
       return false;
     }
   }
 
-  static setWithExpiry(_moduleName, _key, _value, _seconds) {
+  static setWithExpiry(moduleName, key, value, seconds) {
     try {
-      if (typeof _value !== 'string') {
-        _client.set(_moduleName + _key, JSON.stringify(_value), 'EX', _seconds);
+      if (typeof value !== 'string') {
+        client.set(moduleName + key, JSON.stringify(value), 'EX', seconds);
       } else {
-        _client.set(_moduleName + _key, _value, 'EX', _seconds);
+        client.set(moduleName + key, value, 'EX', seconds);
       }
       return true;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR SETWITHEXPIRY');
-      logger.info(_error);
+    } catch (error) {
       return false;
     }
   }
 
-  static setWithOriginalExpiry(_moduleName, _key, _value) {
+  static setWithOriginalExpiry(moduleName, key, value) {
     try {
-      if (typeof _value !== 'string') {
-        _client.set(_moduleName + _key, JSON.stringify(_value), 'KEEPTTL');
+      if (typeof value !== 'string') {
+        client.set(moduleName + key, JSON.stringify(value), 'KEEPTTL');
       } else {
-        _client.set(_moduleName + _key, _value, 'KEEPTTL');
+        client.set(moduleName + key, value, 'KEEPTTL');
       }
       return true;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR SETWITHORIGINALEXPIRY');
-      logger.info(_error);
+    } catch (error) {
       return false;
     }
   }
 
-  static incrementWithOriginalExpiry(_moduleName, _key) {
+  static incrementWithOriginalExpiry(moduleName, key) {
     try {
-      _client.incr(_moduleName + _key);
+      client.incr(moduleName + key);
       return true;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR INCREMENTWITHORIGINALEXPIRY');
-      logger.info(_error);
+    } catch (error) {
       return false;
     }
   }
 
-  static async get(_moduleName, _key) {
+  static async get(moduleName, key) {
     try {
-      return await _client.get(_moduleName + _key);
-    } catch (_error) {
-      logger.info('====> REDIS ERROR GET');
-      logger.info(_error);
+      return await client.get(moduleName + key);
+    } catch (error) {
       return false;
     }
   }
 
-  static async getTTl(_moduleName, _key) {
+  static async getTTl(moduleName, key) {
     try {
-      return await _client.ttl(_moduleName + _key);
-    } catch (_error) {
-      logger.info('====> REDIS ERROR GETTTL');
-      logger.info(_error);
+      return await client.ttl(moduleName + key);
+    } catch (error) {
       return false;
     }
   }
 
-  static async del(_moduleName, _key) {
+  static async del(moduleName, key) {
     try {
-      return JSON.parse(await _client.del(_moduleName + _key));
-    } catch (_error) {
-      logger.info('====> REDIS ERROR DEL');
-      logger.info(_error);
+      return JSON.parse(await client.del(moduleName + key));
+    } catch (error) {
       return false;
     }
   }
 
-  static async insertList(_moduleName, _key, _list) {
+  static async insertList(moduleName, key, list) {
     try {
-      await _client.rpush(`${_moduleName}${_key}`, _list);
+      await client.rpush(`${moduleName}${key}`, list);
       return true;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR INSERTLIST');
-      logger.info(_error);
+    } catch (error) {
       return false;
     }
   }
 
-  static async getList(_moduleName, _key) {
+  static async getList(moduleName, key) {
     try {
-      return await _client.lrange(_moduleName + _key, 0, -1);
-    } catch (_error) {
-      logger.info('====> REDIS ERROR GETLIST');
-      logger.info(_error);
+      return await client.lrange(moduleName + key, 0, -1);
+    } catch (error) {
       return false;
     }
   }
 
-  static async getListWithModuleStart(_moduleName, _key = '') {
+  static async getListWithModuleStart(moduleName, key = '') {
     try {
-      if (_key) {
-        return await _client.get(_moduleName + _key);
+      if (key) {
+        return await client.get(moduleName + key);
       }
 
-      const _pattern = `${_moduleName}*`;
-      const _keys = [];
-      let _cursor = '0';
+      const pattern = `${moduleName}*`;
+      const keys = [];
+      let cursor = '0';
 
       do {
-        const _reply = await _client.scan(
-          _cursor,
-          'MATCH',
-          _pattern,
-          'COUNT',
-          100
-        );
-        _cursor = _reply[0];
-        _keys.push(..._reply[1]);
-      } while (_cursor !== '0');
+        const reply = await client.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+        cursor = reply[0];
+        keys.push(...reply[1]);
+      } while (cursor !== '0');
 
-      if (_keys.length > 0) {
-        const _values = await _client.mget(_keys);
-        return _values;
+      if (keys.length > 0) {
+        const values = await client.mget(keys); 
+        return values;
       } else {
         return [];
       }
-    } catch (_error) {
-      logger.info('====> REDIS ERROR GETLISTWITHMODULESTART');
-      logger.info(_error);
+    } catch (error) {
       return false;
     }
   }
 
   static async flushAll() {
     try {
-      return JSON.parse(await _client.flushdb());
-    } catch (_error) {
-      logger.info('====> REDIS ERROR FLUSHALL');
-      logger.info(_error);
+      return JSON.parse(await client.flushdb());
+    } catch (error) {
       return false;
     }
   }
 
-  static async lPush(_moduleName, _key, _value) {
+  static async lPush(moduleName, key, value) {
     try {
-      return await _client.lpush(_moduleName + _key, _value);
-    } catch (_error) {
-      logger.info('====> REDIS ERROR LPUSH');
-      logger.info(_error);
+      return await client.lpush(moduleName + key, value);
+    } catch (error) {
       return false;
     }
   }
 
-  static async lRem(_moduleName, _key, _value) {
+  static async lRem(moduleName, key, value) {
     try {
-      return await _client.lrem(_moduleName + _key, -1, _value);
-    } catch (_error) {
-      logger.info('====> REDIS ERROR LREM');
-      logger.info(_error);
+      return await client.lrem(moduleName + key, -1, value);
+    } catch (error) {
       return false;
     }
   }
 
-  static async hmset(_tableName, _uniqueValue, _object, _expireTime) {
+  static async hmset(tableName, uniqueValue, object, expireTime) {
     try {
-      await _client.hmset(_tableName, _uniqueValue, JSON.stringify(_object));
-      if (_expireTime) await _client.expire(_tableName, +_expireTime);
+      await client.hmset(tableName, uniqueValue, JSON.stringify(object));
+      if (expireTime) await client.expire(tableName, +expireTime);
 
       return true;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR HMSET');
-      logger.info(_error);
+    } catch (err) {
       return false;
     }
   }
 
-  static async hget(_tableName, _uniqueValue) {
+  static async hget(tableName, uniqueValue) {
     try {
-      const _result = await _client.hget(_tableName, _uniqueValue);
-      return JSON.parse(_result);
-    } catch (_error) {
-      logger.info('====> REDIS ERROR HGET');
-      logger.info(_error);
+      const result = await client.hget(tableName, uniqueValue);
+      return JSON.parse(result);
+    } catch (err) {
       return false;
     }
   }
 
-  static async hdel(_moduleName, _key) {
-    try {
-      const _result = await _client.hdel(_moduleName, _key);
-      return _result === 1;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR HDEL');
-      logger.info(_error);
-      return false;
-    }
+  static async hdel(moduleName, key) {
+    const result = await client.hdel(moduleName, key);
+    return result === 1;
   }
 
   static async ping() {
-    try {
-      const _pingResult = await _client.ping();
-      return _pingResult;
-    } catch (_error) {
-      logger.info('====> REDIS ERROR PING');
-      logger.info(_error);
-      return false;
-    }
+    const pingResult = await client.ping();
+    return pingResult;
   }
 }
 module.exports = RedisCache;

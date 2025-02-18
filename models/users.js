@@ -8,18 +8,33 @@ const Users = sequelize.define('users', {
     primaryKey: true,
     allowNull: false,
   },
-  firstName: {
+  role_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'roles',
+      key: 'id',
+    },
+  },
+  first_name: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-  lastName: {
+  last_name: {
     type: Sequelize.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
   username: {
     type: Sequelize.STRING(255),
-    unique: true,
+    allowNull: true,
+  },
+  gender: {
+    type: Sequelize.ENUM('male', 'female', 'other'),
     allowNull: false,
+  },
+  image: {
+    type: Sequelize.TEXT,
+    allowNull: true,
   },
   email: {
     type: Sequelize.STRING(255),
@@ -28,74 +43,76 @@ const Users = sequelize.define('users', {
   },
   password: {
     type: Sequelize.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
   phone: {
-    type: Sequelize.STRING(15),
+    type: Sequelize.STRING(20),
+    allowNull: true,
   },
-  roleId: {
+  age: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    references: {
-      model: 'roles',
-      key: 'id',
-    },
   },
-  isActive: {
+  date_of_birth: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+  address: {
+    type: Sequelize.JSONB,
+    allowNull: true,
+  },
+  is_active: {
     type: Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
   },
-  emailVerificationOTP: {
-    type: Sequelize.NUMBER,
-  },
-  emailVerificationOTPExpiry: {
-    type: Sequelize.STRING,
-  },
-  emailVerified: {
+  email_verified: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
+    allowNull: false,
   },
-  phoneVerificationOTP: {
-    type: Sequelize.NUMBER,
-  },
-  phoneVerificationOTPExpiry: {
-    type: Sequelize.NUMBER,
-  },
-  phoneVerified: {
+  phone_verified: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
+    allowNull: false,
   },
-  inAppNotifications: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: true,
-  },
-  pushNotifications: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: true,
-  },
-  emailNotifications: {
-      type: Sequelize.BOOLEAN,
-    defaultValue: true,
-  },
-  smsNotifications: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: true,
-  },
-  forgotPasswordOTP: {
-    type: Sequelize.NUMBER,
-  },
-  forgotPasswordOTPExpiry: {
-    type: Sequelize.NUMBER,
-  },
-  forgotPasswordOTPVerified: {
+  in_app_notifications_enabled: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
+    allowNull: false,
   },
-  resetPasswordExpiry: {
-    type: Sequelize.NUMBER,
+  push_notifications_enabled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+  },
+  email_notifications_enabled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+  },
+  sms_notifications_enabled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  critical_notifications_enabled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
   },
   timezone: {
     type: Sequelize.STRING(255),
     allowNull: false,
+  },
+  is_deleted: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  activities: {
+    type: Sequelize.JSONB,
+    allowNull: true,
   },
 });
 

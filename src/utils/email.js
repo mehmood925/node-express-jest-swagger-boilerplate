@@ -1,11 +1,11 @@
-const _nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 const { logger } = require('./logger');
 
 class EmailService {
-  static async sendEmail(_params) {
+  static async sendEmail(params) {
     try {
-      const _transporter = _nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
         auth: {
@@ -13,24 +13,24 @@ class EmailService {
           pass: process.env.SMTP_PASSWORD,
         },
       });
-      const _mailOptions = {
-        to: _params.email,
+      const mailOptions = {
+        to: params.email,
         from: process.env.SENDER_EMAIL,
-        subject: _params.subject,
+        subject: params.subject,
       };
 
-      if (_params.html) {
-        _mailOptions.html = _params.html;
+      if (params.html) {
+        mailOptions.html = params.html;
       } else {
-        _mailOptions.text = _params.body;
+        mailOptions.text = params.body;
       }
 
-      await _transporter.sendMail(_mailOptions);
+      await transporter.sendMail(mailOptions);
       return true;
-    } catch (_error) {
+    } catch (error) {
       logger.info(`=====> ERROR EMAIL SERVICE`);
-      logger.error(_error.message);
-      return _error;
+      logger.error(error.message);
+      return error;
     }
   }
 }

@@ -1,36 +1,42 @@
-const _express = require('express');
-const _router = _express.Router();
+const express = require('express');
+const router = express.Router();
 const { UserController } = require('../controllers/user');
-const _validationMiddleware = require('../middleware/validation');
-const _userValdations = require('../validations/user');
+const validationMiddleware = require('../middleware/validation');
+const userValdations = require('../validations/user');
 const { authMiddleware } = require('../middleware/auth');
-const _CONSTANTS = require('../constant/constant');
-_router.post(
+const CONSTANTS = require('../constant/constant');
+router.post(
   '/register',
-  _validationMiddleware(_userValdations.register),
+  validationMiddleware(userValdations.register),
   UserController.register
 );
-_router.post(
+router.post(
   '/login',
-  _validationMiddleware(_userValdations.login),
+  validationMiddleware(userValdations.login),
   UserController.login
 );
-_router.get(
+router.get(
   '/getProfile',
-  authMiddleware([_CONSTANTS.USER]),
+  authMiddleware([CONSTANTS.USER]),
   UserController.getProfile
 );
-// _router.get("/verifyResetPasswordToken", controller.verifyToken);
-// _router.patch(
-//   '/updatePassword',
-//   authMiddleware,
-//   _validationMiddleware(_userValdations.updatePassword),
-//   UserController.updatePassword
-// );
+router.get('/verifyResetPasswordToken', UserController.verifyToken);
+router.patch(
+  '/updatePassword',
+  authMiddleware,
+  validationMiddleware(userValdations.updatePassword),
+  UserController.updatePassword
+);
 
-// router.post("/forgetPassword", validationMiddleware(valdations.forgetPassword),
-// controller.forgetPassword);
-// router.post("/resetPassword", validationMiddleware(valdations.resetPassword),
-// controller.resetPassword);
+router.post(
+  '/forgetPassword',
+  validationMiddleware(userValdations.forgetPassword),
+  UserController.forgetPassword
+);
+router.post(
+  '/resetPassword',
+  validationMiddleware(userValdations.resetPassword),
+  UserController.resetPassword
+);
 
 module.exports = _router;

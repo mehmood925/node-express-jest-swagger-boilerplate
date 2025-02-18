@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../src/utils/database');
 const Sequelize = DataTypes;
-const UserSymptoms = sequelize.define('user_symptoms', {
+const UserMedicationLogs = sequelize.define('user_medication_logs', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -16,22 +16,27 @@ const UserSymptoms = sequelize.define('user_symptoms', {
       key: 'id',
     },
   },
-  symptom_id: {
+  medication_id: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
-      model: 'symptoms',
+      model: 'medications',
       key: 'id',
     },
   },
-  severity: {
-    type: Sequelize.INTEGER,
+  status: {
+    type: Sequelize.ENUM('skipped', 'taken', 'missed'),
     allowNull: false,
   },
-  logged_at: {
+  taken_at: {
     type: Sequelize.DATE,
+    allowNull: true,
+  },
+  snoozed: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
     allowNull: false,
   },
 });
 
-module.exports = { UserSymptoms };
+module.exports = { UserMedicationLogs };
