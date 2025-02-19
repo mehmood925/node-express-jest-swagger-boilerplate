@@ -11,6 +11,7 @@ const RedisCache = require('../utils/cache');
 const { logger } = require('../utils/logger');
 const { generateTokens } = require('../middleware/auth');
 const { generateRandomCode } = require('../utils/randomNumber');
+const { RoleDal } = require('../dal/roles');
 
 const complexityOptions = {
   min: 8,
@@ -23,6 +24,12 @@ const complexityOptions = {
 
 class UserService {
   static async register(params) {
+    const reole = await RoleDal.create({
+      where: { title: "user" },
+      attributes: ['id', 'title'],
+    });
+    console.log({reole})
+    return reole
     const existingEmail = await Users.findOne({
       where: { email: params.email },
       attributes: ['id', 'email', 'phone', 'username'],

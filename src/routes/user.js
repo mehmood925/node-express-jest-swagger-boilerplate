@@ -5,9 +5,10 @@ const validationMiddleware = require('../middleware/validation');
 const userValdations = require('../validations/user');
 const { authMiddleware } = require('../middleware/auth');
 const CONSTANTS = require('../constant/constant');
+
 router.post(
   '/register',
-  validationMiddleware(userValdations.register),
+  //validationMiddleware(userValdations.register),
   UserController.register
 );
 router.post(

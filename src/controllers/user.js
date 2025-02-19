@@ -5,6 +5,7 @@ class UserController {
   static async register(req, res, next) {
     try {
       const response = await UserService.register(req.body);
+      console.log({response})
       return responseHandler({
         response: res,
         result: response,

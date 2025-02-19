@@ -5,14 +5,14 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const data = [
       {
-        role: 'user',
-        createdAt: '2023-02-18 18:52:00.000000',
-        updatedAt: '2023-02-18 18:52:00.000000',
+        title: 'user',
+        created_at: '2023-02-18 18:52:00.000000',
+        updated_at: '2023-02-18 18:52:00.000000',
       },
       {
-        role: 'admin',
-        createdAt: '2023-02-18 18:52:00.000000',
-        updatedAt: '2023-02-18 18:52:00.000000',
+        title: 'admin',
+        created_at: '2023-02-18 18:52:00.000000',
+        updated_at: '2023-02-18 18:52:00.000000',
       },
     ];
     try {
