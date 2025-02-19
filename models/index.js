@@ -217,6 +217,55 @@ UserFirebaseTokens.belongsTo(Users, {
   foreignKey: 'user_id',
 });
 
+Users.belongsToMany(Medications, {
+  through: 'user_medications',
+});
+Medications.belongsToMany(Users, {
+  through: 'user_medications',
+});
+
+Users.belongsToMany(Medications, {
+  through: 'user_medication_schedules',
+});
+Medications.belongsToMany(Users, {
+  through: 'user_medication_schedules',
+});
+
+Users.belongsToMany(Medications, {
+  through: 'user_medication_logs',
+});
+Medications.belongsToMany(Users, {
+  through: 'user_medication_logs',
+});
+
+Users.belongsToMany(Subscriptions, {
+  through: 'user_subscriptions',
+});
+Subscriptions.belongsToMany(Users, {
+  through: 'user_subscriptions',
+});
+
+Users.belongsToMany(Subscriptions, {
+  through: 'payments',
+});
+Subscriptions.belongsToMany(Users, {
+  through: 'payments',
+});
+
+Users.belongsToMany(Symptoms, {
+  through: 'user_symptoms',
+});
+Symptoms.belongsToMany(Users, {
+  through: 'user_symptoms',
+});
+
+Users.belongsToMany(LabValues, {
+  through: 'user_lab_values',
+});
+LabValues.belongsToMany(Users, {
+  through: 'user_lab_values',
+});
+
 module.exports = {
   AiHealthLogs,
   Appointments,
