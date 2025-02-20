@@ -16,6 +16,10 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
       min_safe_value: {
         type: Sequelize.INTEGER,
         allowNull: true,

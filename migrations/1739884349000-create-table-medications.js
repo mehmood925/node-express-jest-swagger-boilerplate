@@ -17,7 +17,7 @@ module.exports = {
         allowNull: true,
       },
       strength: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.JSONB,
         allowNull: true,
       },
       created_at: {

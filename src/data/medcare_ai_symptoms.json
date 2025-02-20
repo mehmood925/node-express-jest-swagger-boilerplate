@@ -1,0 +1,1013 @@
+[
+    {
+        "title": "Abnormal Pain"
+    },
+    {
+        "title": "Abnormal Bleeding"
+    },
+    {
+        "title": "Abnormal Heartbeat"
+    },
+    {
+        "title": "Absence Of Menstruation"
+    },
+    {
+        "title": "Abnormal Menstruation"
+    },
+    {
+        "title": "Abnormal Vaginal Bleeding"
+    },
+    {
+        "title": "Abscess"
+    },
+    {
+        "title": "Aching Muscles"
+    },
+    {
+        "title": "Acid Reflux"
+    },
+    {
+        "title": "Acne"
+    },
+    {
+        "title": "Agitation"
+    },
+    {
+        "title": "Allergies"
+    },
+    {
+        "title": "Anemia"
+    },
+    {
+        "title": "Ankle Swelling"
+    },
+    {
+        "title": "anxious Mood"
+    },
+    {
+        "title": "Anxiety"
+    },
+    {
+        "title": "Aphasia"
+    },
+    {
+        "title": "Appetite Loss"
+    },
+    {
+        "title": "Arm Pain"
+    },
+    {
+        "title": "Arm Numbness"
+    },
+    {
+        "title": "Arthritis"
+    },
+    {
+        "title": "Asthma"
+    },
+    {
+        "title": "Ataxia"
+    },
+    {
+        "title": "Atrial Fibrillation"
+    },
+    {
+        "title": "Back Pain"
+    },
+    {
+        "title": "Balance Problems"
+    },
+    {
+        "title": "Bedwetting"
+    },
+    {
+        "title": "Behavioral Changes"
+    },
+    {
+        "title": "Belching"
+    },
+    {
+        "title": "Binge Eating"
+    },
+    {
+        "title": "Bipolar Disorder"
+    },
+    {
+        "title": "Blackouts"
+    },
+    {
+        "title": "Bladder Control Issues"
+    },
+    {
+        "title": "Bleeding Gums"
+    },
+    {
+        "title": "Blindness"
+    },
+    {
+        "title": "Blisters"
+    },
+    {
+        "title": "Blood in Stool"
+    },
+    {
+        "title": "Blood in Mucus"
+    },
+    {
+        "title": "Blood in Urine"
+    },
+    {
+        "title": "Blurred Vision"
+    },
+    {
+        "title": "Boils"
+    },
+    {
+        "title": "Bone Pain"
+    },
+    {
+        "title": "Breast Lumps"
+    },
+    {
+        "title": "Breast Pain"
+    },
+    {
+        "title": "Breath Odor"
+    },
+    {
+        "title": "Breathing Difficulty"
+    },
+    {
+        "title": "Bruising"
+    },
+    {
+        "title": "Burning Sensation"
+    },
+    {
+        "title": "Bursitis"
+    },
+    {
+        "title": "Chest Discomfort"
+    },
+    {
+        "title": "Chest Pain"
+    },
+    {
+        "title": "Chills"
+    },
+    {
+        "title": "Chronic Cough"
+    },
+    {
+        "title": "Chronic Fatigue"
+    },
+    {
+        "title": "Cold Intolerance"
+    },
+    {
+        "title": "Cold Sores"
+    },
+    {
+        "title": "Confusion"
+    },
+    {
+        "title": "Constipation"
+    },
+    {
+        "title": "Coughing Up Blood"
+    },
+    {
+        "title": "Cramps"
+    },
+    {
+        "title": "Cravings"
+    },
+    {
+        "title": "Cyanosis"
+    },
+    {
+        "title": "Dark Urine"
+    },
+    {
+        "title": "Decreased Appetite"
+    },
+    {
+        "title": "Dehydration"
+    },
+    {
+        "title": "Delirium"
+    },
+    {
+        "title": "Delusions"
+    },
+    {
+        "title": "Depression"
+    },
+    {
+        "title": "Diarrhea"
+    },
+    {
+        "title": "Difficulty Swallowing"
+    },
+    {
+        "title": "Dizziness"
+    },
+    {
+        "title": "Double Vision"
+    },
+    {
+        "title": "Drooling"
+    },
+    {
+        "title": "Dry Eyes"
+    },
+    {
+        "title": "Dry Mouth"
+    },
+    {
+        "title": "Dry Skin"
+    },
+    {
+        "title": "Dysarthria"
+    },
+    {
+        "title": "Dyspepsia"
+    },
+    {
+        "title": "Dyspnea"
+    },
+    {
+        "title": "Earache"
+    },
+    {
+        "title": "Ear Discharge"
+    },
+    {
+        "title": "Ear Ringing"
+    },
+    {
+        "title": "Edema"
+    },
+    {
+        "title": "Elbow Pain"
+    },
+    {
+        "title": "Emotional Instability"
+    },
+    {
+        "title": "Enlarged Lymph Nodes"
+    },
+    {
+        "title": "Erectile Dysfunction"
+    },
+    {
+        "title": "Excessive Sweating"
+    },
+    {
+        "title": "Excessive Thirst"
+    },
+    {
+        "title": "Eye Discharge"
+    },
+    {
+        "title": "Eye Redness"
+    },
+    {
+        "title": "Facial Drooping"
+    },
+    {
+        "title": "Fainting"
+    },
+    {
+        "title": "Falling"
+    },
+    {
+        "title": "Fatigue"
+    },
+    {
+        "title": "Fecal Incontinence"
+    },
+    {
+        "title": "Fever"
+    },
+    {
+        "title": "Flank Pain"
+    },
+    {
+        "title": "Flatulence"
+    },
+    {
+        "title": "Flushing"
+    },
+    {
+        "title": "Foot Pain"
+    },
+    {
+        "title": "Frequent Urination"
+    },
+    {
+        "title": "Gait Abnormalities"
+    },
+    {
+        "title": "Gas"
+    },
+    {
+        "title": "Gastroesophageal Reflux"
+    },
+    {
+        "title": "Genital Itching"
+    },
+    {
+        "title": "Goiter"
+    },
+    {
+        "title": "Gum Disease"
+    },
+    {
+        "title": "Hair Loss"
+    },
+    {
+        "title": "Hallucinations"
+    },
+    {
+        "title": "Halitosis (Bad Breath)"
+    },
+    {
+        "title": "Hand Tremors"
+    },
+    {
+        "title": "Headache"
+    },
+    {
+        "title": "Hearing Loss"
+    },
+    {
+        "title": "Heart Palpitations"
+    },
+    {
+        "title": "Heartburn"
+    },
+    {
+        "title": "Hematemesis (Vomiting Blood)"
+    },
+    {
+        "title": "Hematuria (Blood in Urine)"
+    },
+    {
+        "title": "Hemoptysis (Coughing Up Blood)"
+    },
+    {
+        "title": "Hepatomegaly (Enlarged Liver)"
+    },
+    {
+        "title": "Hiccups"
+    },
+    {
+        "title": "Hoarseness"
+    },
+    {
+        "title": "Hyperhidrosis (Excessive Sweating)"
+    },
+    {
+        "title": "Hyperpigmentation"
+    },
+    {
+        "title": "Hypertension (High Blood Pressure)"
+    },
+    {
+        "title": "Hypotension (Low Blood Pressure)"
+    },
+    {
+        "title": "Impaired Coordination"
+    },
+    {
+        "title": "Impaired Memory"
+    },
+    {
+        "title": "Incontinence (Urinary/Bowel)"
+    },
+    {
+        "title": "Indigestion"
+    },
+    {
+        "title": "Itchy Eyes"
+    },
+    {
+        "title": "Insomnia"
+    },
+    {
+        "title": "Irregular Heartbeat"
+    },
+    {
+        "title": "Irritability"
+    },
+    {
+        "title": "Itchy Skin"
+    },
+    {
+        "title": "Jaw Pain"
+    },
+    {
+        "title": "Jaundice"
+    },
+    {
+        "title": "Joint Pain"
+    },
+    {
+        "title": "Joint Swelling"
+    },
+    {
+        "title": "Joylessness"
+    },
+    {
+        "title": "Knee Pain"
+    },
+    {
+        "title": "Knuckle Pain"
+    },
+    {
+        "title": "Laryngitis"
+    },
+    {
+        "title": "Lethargy"
+    },
+    {
+        "title": "Left Glute Pain"
+    },
+    {
+        "title": "Leg Cramps"
+    },
+    {
+        "title": "Leg Numbness"
+    },
+    {
+        "title": "Leg Pain"
+    },
+    {
+        "title": "Lesions"
+    },
+    {
+        "title": "Light Sensitivity (Photophobia)"
+    },
+    {
+        "title": "Lightheadedness"
+    },
+    {
+        "title": "Limb Weakness"
+    },
+    {
+        "title": "Listlessness"
+    },
+    {
+        "title": "Loin pain"
+    },
+    {
+        "title": "Loneliness"
+    },
+    {
+        "title": "Lip Swelling"
+    },
+    {
+        "title": "Loss of Appetite"
+    },
+    {
+        "title": "Loss of Balance"
+    },
+    {
+        "title": "Loss of Smell "
+    },
+    {
+        "title": "Loss of Voice"
+    },
+    {
+        "title": "Loss of Taste"
+    },
+    {
+        "title": "Low Back Pain"
+    },
+    {
+        "title": "Low or Decreased Libido"
+    },
+    {
+        "title": "Low Self-Esteem"
+    },
+    {
+        "title": "Lower Abdominal Pain"
+    },
+    {
+        "title": "Lower Back Pain"
+    },
+    {
+        "title": "Lump Feeling in Throat"
+    },
+    {
+        "title": "Lump Under The Armpit"
+    },
+    {
+        "title": "Lung Congestion"
+    },
+    {
+        "title": "Lumbago"
+    },
+    {
+        "title": "Memory Loss"
+    },
+    {
+        "title": "Menstrual cramps"
+    },
+    {
+        "title": "Meltdown"
+    },
+    {
+        "title": "Menopaulsal Problems"
+    },
+    {
+        "title": "Menstrual Irregularities"
+    },
+    {
+        "title": "Mood Swings"
+    },
+    {
+        "title": "Mouth Ulcers"
+    },
+    {
+        "title": "Muscle Cramps"
+    },
+    {
+        "title": "Muscle Pain (Myalgia)"
+    },
+    {
+        "title": "Muscle Spasms"
+    },
+    {
+        "title": "Muscle Weakness"
+    },
+    {
+        "title": "Muscle Strain "
+    },
+    {
+        "title": "Muscle Tension"
+    },
+    {
+        "title": "Motion Sickness"
+    },
+    {
+        "title": "Motor Disorder"
+    },
+    {
+        "title": "Mental Fatigue"
+    },
+    {
+        "title": "Nail Biting"
+    },
+    {
+        "title": "Nail Discolouration"
+    },
+    {
+        "title": "Nail pitting"
+    },
+    {
+        "title": "Nasal Congestion"
+    },
+    {
+        "title": "Nausea"
+    },
+    {
+        "title": "Neck Pain"
+    },
+    {
+        "title": "Nerve Pain"
+    },
+    {
+        "title": "Nervous Breakdown"
+    },
+    {
+        "title": "Nervousness"
+    },
+    {
+        "title": "Nauralgia"
+    },
+    {
+        "title": "neurodermatitis"
+    },
+    {
+        "title": "Neuroleptic Malignant Syndrome (NMS)"
+    },
+    {
+        "title": "Neuropathy"
+    },
+    {
+        "title": "Night Sweats"
+    },
+    {
+        "title": "Nightmares"
+    },
+    {
+        "title": "Nipple Discharge "
+    },
+    {
+        "title": "Nipple Soreness"
+    },
+    {
+        "title": "Noise sensitivity "
+    },
+    {
+        "title": "Nose Bleeds"
+    },
+    {
+        "title": "Numbness "
+    },
+    {
+        "title": "Numbness in Finger and Toes "
+    },
+    {
+        "title": "Nystagmus"
+    },
+    {
+        "title": "Obesity"
+    },
+    {
+        "title": "Oliguria (Low Urine Output)"
+    },
+    {
+        "title": "Oral Thrush"
+    },
+    {
+        "title": "Orthopnea (Shortness of Breath When Lying Flat)"
+    },
+    {
+        "title": "Overheating"
+    },
+    {
+        "title": "Overwhelmed"
+    },
+    {
+        "title": "Ovary Pain"
+    },
+    {
+        "title": "Obsessive-Compulsive Disorder (OCD)"
+    },
+    {
+        "title": "Ocular Migraine"
+    },
+    {
+        "title": "Ocular Motor Disturbances"
+    },
+    {
+        "title": "Oozing Wounds"
+    },
+    {
+        "title": "Osteoarthritis"
+    },
+    {
+        "title": "Pain"
+    },
+    {
+        "title": "Painful intercourse (dyspareunia)"
+    },
+    {
+        "title": "Painful periods (dysmenorrhea)"
+    },
+    {
+        "title": "Painful urination"
+    },
+    {
+        "title": "Palpitations"
+    },
+    {
+        "title": "Panic attacks"
+    },
+    {
+        "title": "Paralysis"
+    },
+    {
+        "title": "Pelvic pain"
+    },
+    {
+        "title": "Penile discharge"
+    },
+    {
+        "title": "Phlegm (sputum)"
+    },
+    {
+        "title": "Photophobia (light sensitivity)"
+    },
+    {
+        "title": "Pins and needles (paresthesia)"
+    },
+    {
+        "title": "Poor coordination"
+    },
+    {
+        "title": "Postnasal drip"
+    },
+    {
+        "title": "Pressure in chest"
+    },
+    {
+        "title": "Prostate pain"
+    },
+    {
+        "title": "Puffy eyes"
+    },
+    {
+        "title": "Pus discharge"
+    },
+    {
+        "title": "Paleness (Pallor)"
+    },
+    {
+        "title": "Painful Glands"
+    },
+    {
+        "title": "Patches"
+    },
+    {
+        "title": "Pink Eye"
+    },
+    {
+        "title": "Post-traumatic Stress Disorder (PTSD)"
+    },
+    {
+        "title": "Premenstrual Syndrome (PMS)"
+    },
+    {
+        "title": "Pressure in the Eyes"
+    },
+    {
+        "title": "Pressured Speech"
+    },
+    {
+        "title": "Problems Concentrating"
+    },
+    {
+        "title": "Psoriasis"
+    },
+    {
+        "title": "Ptosis"
+    },
+    {
+        "title": "Pica (Craving Non-Food Substances)"
+    },
+    {
+        "title": "Quadriplegia"
+    },
+    {
+        "title": "Queasiness"
+    },
+    {
+        "title": "Rapid breathing (tachypnea)"
+    },
+    {
+        "title": "Rash"
+    },
+    {
+        "title": "Rectal bleeding"
+    },
+    {
+        "title": "Rectal pain"
+    },
+    {
+        "title": "Red eyes"
+    },
+    {
+        "title": "Restless legs"
+    },
+    {
+        "title": "Ringing in ears (tinnitus)"
+    },
+    {
+        "title": "Runny nose"
+    },
+    {
+        "title": "Rib Pain"
+    },
+    {
+        "title": "Rumination "
+    },
+    {
+        "title": "Rejection Sensitivity"
+    },
+    {
+        "title": "Scalp tenderness"
+    },
+    {
+        "title": "Scrotal swelling"
+    },
+    {
+        "title": "Seizures"
+    },
+    {
+        "title": "Sensitivity to cold/heat"
+    },
+    {
+        "title": "Shakiness"
+    },
+    {
+        "title": "Shivering"
+    },
+    {
+        "title": "Shortness of breath"
+    },
+    {
+        "title": "Shoulder pain"
+    },
+    {
+        "title": "Sinus pain"
+    },
+    {
+        "title": "Skin discoloration"
+    },
+    {
+        "title": "Skin peeling"
+    },
+    {
+        "title": "Skin rash"
+    },
+    {
+        "title": "Skin ulcers"
+    },
+    {
+        "title": "Slurred speech"
+    },
+    {
+        "title": "Sneezing"
+    },
+    {
+        "title": "Snoring"
+    },
+    {
+        "title": "Sore throat"
+    },
+    {
+        "title": "Speech difficulty"
+    },
+    {
+        "title": "Stiff neck"
+    },
+    {
+        "title": "Stomach cramps"
+    },
+    {
+        "title": "Stool color changes"
+    },
+    {
+        "title": "Sudden weight gain/loss"
+    },
+    {
+        "title": "Sun sensitivity"
+    },
+    {
+        "title": "Swallowing difficulty"
+    },
+    {
+        "title": "Sweating (excessive)"
+    },
+    {
+        "title": "Swollen ankles"
+    },
+    {
+        "title": "Swollen glands"
+    },
+    {
+        "title": "Swollen joints"
+    },
+    {
+        "title": "Sensory overload"
+    },
+    {
+        "title": "Sexual Dyfunction"
+    },
+    {
+        "title": "Tailbone pain"
+    },
+    {
+        "title": "Teeth grinding (bruxism)"
+    },
+    {
+        "title": "Testicular pain"
+    },
+    {
+        "title": "Thirst (excessive)"
+    },
+    {
+        "title": "Throat tightness"
+    },
+    {
+        "title": "Throbbing pain"
+    },
+    {
+        "title": "Tingling in hands/feet"
+    },
+    {
+        "title": "Tiredness"
+    },
+    {
+        "title": "Toe numbness"
+    },
+    {
+        "title": "Toothache"
+    },
+    {
+        "title": "Tremors"
+    },
+    {
+        "title": "Trouble speaking"
+    },
+    {
+        "title": "Twitching"
+    },
+    {
+        "title": "Tearfullness"
+    },
+    {
+        "title": "Tension"
+    },
+    {
+        "title": "Tongue Numbness"
+    },
+    {
+        "title": "Trembling"
+    },
+    {
+        "title": "Unhappy"
+    },
+    {
+        "title": "Ulcers"
+    },
+    {
+        "title": "Unconsciousness"
+    },
+    {
+        "title": "Uncoordinated movement"
+    },
+    {
+        "title": "Unsteady gait"
+    },
+    {
+        "title": "Urgency to urinate"
+    },
+    {
+        "title": "Urinary retention"
+    },
+    {
+        "title": "Urine odor (strong)"
+    },
+    {
+        "title": "Urticaria (hives)"
+    },
+    {
+        "title": "Uterine bleeding (abnormal)"
+    },
+    {
+        "title": "Vaginal bleeding"
+    },
+    {
+        "title": "Vaginal discharge"
+    },
+    {
+        "title": "Vaginal dryness"
+    },
+    {
+        "title": "Vertigo"
+    },
+    {
+        "title": "Vision changes (e.g., flashes, spots)"
+    },
+    {
+        "title": "Vision loss"
+    },
+    {
+        "title": "Vomiting"
+    },
+    {
+        "title": "Vomiting blood (hematemesis)"
+    },
+    {
+        "title": "Walking difficulty"
+    },
+    {
+        "title": "Weak grip"
+    },
+    {
+        "title": "Weakness (generalized)"
+    },
+    {
+        "title": "Weight gain (unintended)"
+    },
+    {
+        "title": "Weight loss (unintended)"
+    },
+    {
+        "title": "Wheezing"
+    },
+    {
+        "title": "White patches in mouth"
+    },
+    {
+        "title": "Wrist pain"
+    },
+    {
+        "title": "Yawning"
+    }
+]

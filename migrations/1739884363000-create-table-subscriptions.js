@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      title: {
+      title: { // Free Tier, Monthly Budget, Annual ENterprize
         type: Sequelize.STRING(255),
         allowNull: false,
       },

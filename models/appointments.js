@@ -52,7 +52,7 @@ const Appointments = sequelize.define(
         'pending',
         'completed',
         'cancelled',
-        'missed',
+        'skipped',
         'rescheduled'
       ),
       allowNull: false,

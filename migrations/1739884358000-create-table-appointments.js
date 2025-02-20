@@ -46,7 +46,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'completed', 'cancelled', 'missed', 'rescheduled'),
+        type: Sequelize.ENUM('pending', 'completed', 'cancelled', 'skipped', 'rescheduled'),
         allowNull: false,
       },
       is_deleted: {

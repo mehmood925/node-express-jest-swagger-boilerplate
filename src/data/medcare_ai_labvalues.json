@@ -1,0 +1,222 @@
+[
+    {
+        "title": "Alanine Aminotransferase (ALT)",
+        "unit": "U/L",
+        "description": "Liver enzyme; elevated in liver damage."
+    },
+    {
+        "title": "Albumin",
+        "unit": "g/dL",
+        "description": "Protein indicating kidney/liver health or nutrition."
+    },
+    {
+        "title": "Alkaline Phosphatase (ALP)",
+        "unit": "U/L",
+        "description": "Elevated in liver/bone disorders or bile duct issues."
+    },
+    {
+        "title": "Ammonia",
+        "unit": "µg/dL or µmol/L",
+        "description": "High levels suggest liver dysfunction or metabolic disorders."
+    },
+    {
+        "title": "Amylase",
+        "unit": "U/L",
+        "description": "Pancreatic enzyme; elevated in pancreatitis."
+    },
+    {
+        "title": "Antinuclear Antibody (ANA)",
+        "unit": "Titer (e.g., 1:160)",
+        "description": "Autoimmune disease marker (e.g., lupus)."
+    },
+    {
+        "title": "Arterial Blood Gas (ABG)",
+        "unit": "pH, pCO₂ (mmHg), pO₂",
+        "description": "Assesses lung/kidney function and acid-base balance."
+    },
+    {
+        "title": "Aspartate Aminotransferase (AST)",
+        "unit": "U/L",
+        "description": "Elevated in liver, heart, or muscle damage."
+    },
+    {
+        "title": "Bilirubin",
+        "unit": "mg/dL",
+        "description": "Liver function marker; high levels cause jaundice."
+    },
+    {
+        "title": "Blood Glucose",
+        "unit": "mg/dL or mmol/L",
+        "description": "Fasting: 70–99 mg/dL; screens for diabetes."
+    },
+    {
+        "title": "Blood Urea Nitrogen (BUN)",
+        "unit": "mg/dL",
+        "description": "Reflects kidney function/hydration; normal: 7–20 mg/dL."
+    },
+    {
+        "title": "Bone Density (DEXA Scan)",
+        "unit": "T-score",
+        "description": "Diagnoses osteoporosis (T-score ≤ -2.5)."
+    },
+    {
+        "title": "Brain Natriuretic Peptide (BNP)",
+        "unit": "pg/mL",
+        "description": "Heart failure marker; higher levels indicate severity."
+    },
+    {
+        "title": "C-Reactive Protein (CRP)",
+        "unit": "mg/L",
+        "description": "General inflammation marker; high sensitivity (hs-CRP) for heart risk."
+    },
+    {
+        "title": "Calcium",
+        "unit": "mg/dL",
+        "description": "Normal: 8.5–10.2 mg/dL; assesses bone/kidney health."
+    },
+    {
+        "title": "CD4 Count",
+        "unit": "cells/µL",
+        "description": "Immune health in HIV; normal: 500–1,500 cells/µL."
+    },
+    {
+        "title": "Cholesterol (Total, LDL, HDL)",
+        "unit": "mg/dL",
+        "description": "Total <200 mg/dL; LDL <100 mg/dL; HDL >40/50 mg/dL (men/women)."
+    },
+    {
+        "title": "Creatinine",
+        "unit": "mg/dL",
+        "description": "Kidney function; normal: 0.6–1.2 mg/dL (varies by muscle mass)."
+    },
+    {
+        "title": "D-Dimer",
+        "unit": "µg/mL or mg/L",
+        "description": "Blood clot marker (e.g., DVT, pulmonary embolism)."
+    },
+    {
+        "title": "Erythrocyte Sedimentation Rate (ESR)",
+        "unit": "mm/hr",
+        "description": "Non-specific inflammation marker; normal: <20 mm/hr."
+    },
+    {
+        "title": "Estimated Glomerular Filtration Rate (eGFR)",
+        "unit": "mL/min/1.73m²",
+        "description": "Kidney function; normal: ≥90 (no chronic kidney disease)."
+    },
+    {
+        "title": "Ferritin",
+        "unit": "ng/mL",
+        "description": "Iron storage protein; low = deficiency, high = inflammation."
+    },
+    {
+        "title": "Folate (Vitamin B9)",
+        "unit": "ng/mL",
+        "description": "Deficiency causes anemia; normal: >4 ng/mL."
+    },
+    {
+        "title": "Glomerular Filtration Rate (GFR)",
+        "unit": "mL/min/1.73m²",
+        "description": "Direct kidney function measurement."
+    },
+    {
+        "title": "Hemoglobin (Hb)",
+        "unit": "g/dL",
+        "description": "Oxygen-carrying protein; normal: 13.5–17.5 g/dL (men), 12–15.5 g/dL (women)."
+    },
+    {
+        "title": "Hemoglobin A1c (HbA1c)",
+        "unit": "%",
+        "description": "Avg. blood sugar over 3 months; diabetes: ≥6.5%."
+    },
+    {
+        "title": "International Normalized Ratio (INR)",
+        "unit": "Unitless",
+        "description": "Blood clotting time; therapeutic range varies (e.g., 2–3 for atrial fibrillation)."
+    },
+    {
+        "title": "Iron",
+        "unit": "µg/dL",
+        "description": "Normal: 60–170 µg/dL; assesses anemia or overload."
+    },
+    {
+        "title": "Lipase",
+        "unit": "U/L",
+        "description": "Pancreatic enzyme; elevated in pancreatitis."
+    },
+    {
+        "title": "Magnesium",
+        "unit": "mg/dL",
+        "description": "Normal: 1.7–2.2 mg/dL; critical for nerve/muscle function."
+    },
+    {
+        "title": "Mean Corpuscular Volume (MCV)",
+        "unit": "fL",
+        "description": "Red blood cell size; classifies anemia (microcytic/macrocytic)."
+    },
+    {
+        "title": "Phosphate",
+        "unit": "mg/dL",
+        "description": "Normal: 2.5–4.5 mg/dL; linked to kidney/bone health."
+    },
+    {
+        "title": "Platelet Count",
+        "unit": "platelets/µL",
+        "description": "Normal: 150,000–450,000/µL; low = bleeding risk."
+    },
+    {
+        "title": "Potassium",
+        "unit": "mEq/L",
+        "description": "Normal: 3.5–5.0 mEq/L; critical for heart function."
+    },
+    {
+        "title": "Prostate-Specific Antigen (PSA)",
+        "unit": "ng/mL",
+        "description": "Prostate health; normal: <4 ng/mL (age-dependent)."
+    },
+    {
+        "title": "Sodium",
+        "unit": "mEq/L",
+        "description": "Normal: 135–145 mEq/L; imbalance affects brain/kidneys."
+    },
+    {
+        "title": "Thyroid-Stimulating Hormone (TSH)",
+        "unit": "mIU/L",
+        "description": "Normal: 0.4–4.0 mIU/L; screens for hypo/hyperthyroidism."
+    },
+    {
+        "title": "Total Protein",
+        "unit": "g/dL",
+        "description": "Normal: 6.0–8.3 g/dL; reflects liver/nutritional status."
+    },
+    {
+        "title": "Triglycerides",
+        "unit": "mg/dL",
+        "description": "Normal: <150 mg/dL; high levels linked to heart disease."
+    },
+    {
+        "title": "Troponin",
+        "unit": "ng/L",
+        "description": "Cardiac enzyme; elevated in heart attacks."
+    },
+    {
+        "title": "Uric Acid",
+        "unit": "mg/dL",
+        "description": "Normal: 3.4–7.0 mg/dL (men), 2.4–6.0 mg/dL (women); high = gout risk."
+    },
+    {
+        "title": "Vitamin B12",
+        "unit": "pg/mL",
+        "description": "Normal: 200–900 pg/mL; deficiency causes anemia/neuro issues."
+    },
+    {
+        "title": "Vitamin D (25-hydroxyvitamin D)",
+        "unit": "ng/mL or nmol/L",
+        "description": "Normal: 20–50 ng/mL; deficiency = bone/metabolic risks."
+    },
+    {
+        "title": "White Blood Cell Count (WBC)",
+        "unit": "cells/µL",
+        "description": "Normal: 4,000–11,000/µL; high = infection, low = immune issues."
+    }
+]
