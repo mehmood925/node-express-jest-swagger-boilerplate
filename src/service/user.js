@@ -12,11 +12,10 @@ const { logger } = require('../utils/logger');
 const { generateTokens } = require('../middleware/auth');
 const { generateRandomCode } = require('../utils/randomNumber');
 const { RoleDal } = require('../dal');
-// require('dotenv').config();
-// const fs = require('fs');
-// const axios = require('axios');
-// const path = require('path');
-
+require('dotenv').config();
+const fs = require('fs');
+const axios = require('axios');
+const path = require('path');
 
 const complexityOptions = {
   min: 8,
@@ -30,7 +29,7 @@ const API_URL = 'https://api.barcodelookup.com/v3/products';
 const API_KEY = 'rfm02p610h1nciuts1sohp494oyntz';
 let counter = 0;
 class UserService {
-  static async fetchBarcodeData(title, length, i) {
+  static async fetchBarcodeData(title) {
     const queryParams = ['search', 'title', 'brand'];
 
     for (let param of queryParams) {
@@ -45,7 +44,7 @@ class UserService {
 
         if (response.status === 200 && response.data.products.length > 0) {
           counter += 1;
-          console.log('Found ', counter, ' of ', length, ' iteration ', i + 1);
+          console.log('Found ', counter);
           const product = response.data.products[0]; // Take the first product
           return {
             barcode_number: product.barcode_number || null,
@@ -73,9 +72,27 @@ class UserService {
       const filePath = path.resolve(jsonFilePath);
       const rawData = fs.readFileSync(filePath, 'utf8');
       let data = JSON.parse(rawData);
-      const updatedData = this.updateKeys(data);
+      console.log({ len: data.length });
+      let cc = 0;
+      // data = data.filter((item)=> item.source === 'eu');
+      // console.log({len: data.length})
+      for (let obj of data) {
+        if (obj.source === 'au') {
+          const barcodeData = await this.fetchBarcodeData(obj.title);
+          obj.barcode_number = barcodeData.barcode_number;
+          obj.barcode_formats = barcodeData.barcode_formats;
+          fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
+          cc+=1;
+          console.log(
+            `Updated record ${cc} with value ${
+              barcodeData.barcode_number
+            } and counter so far is ${counter}`
+          );
+        }
+      }
+      //const updatedData = this.updateKeys(data);
       //const newFilePath = '/Users/tk-lpt-0958/Downloads/work/node-express-jest-swagger-boilerplate/src/data/medcare_ai_combined_medications.json'
-      fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 4));
+      //fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 4));
       console.log('JSON file updated successfully!');
     } catch (error) {
       console.error('Error processing JSON file:', error.message);
@@ -149,8 +166,9 @@ class UserService {
   }
 
   static async register(params) {
-    
-    //await this.updateJsonFile(['./src/data/medcare_ai_au.json', './src/data/medcare_ai_eu.json', './src/data/medcare_ai_it.json', './src/data/medcare_ai_usa.json']);
+    await this.updateJsonFile(
+      './src/data/medcare_ai_combined_medications.json'
+    );
     return true;
     // const rsole = await RoleDal.findOne({
     //   where: { title_hash: hash('admin') },

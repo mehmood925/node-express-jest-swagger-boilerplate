@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const { MedicationDal, MedicationBarcodeDal } = require('../src/dal');
+const { logger } = require('../src/utils/logger');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -20,6 +21,7 @@ module.exports = {
         });
         let medicationId;
         if (!record) {
+          logger.info(`Inserting medication seeder ${medication.title}`);
           const transaction = await queryInterface.sequelize.transaction(); // Start transaction
           const newMedication = await MedicationDal.create(
             {
@@ -52,7 +54,7 @@ module.exports = {
           await transaction.commit(); // Commit transaction if all operations succeed
         }
       }
-      console.log('Medications and barcodes seeded successfully!');
+      logger.info('Medications seeder executed successfully!');
     } catch (error) {
       await transaction.rollback(); // Rollback transaction on error
       console.error('Error seeding medications:', error);

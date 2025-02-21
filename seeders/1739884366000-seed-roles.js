@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const { RoleDal } = require('../src/dal');
+const { logger } = require('../src/utils/logger');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,20 +13,20 @@ module.exports = {
       filePath = path.resolve(filePath);
       const rawData = fs.readFileSync(filePath, 'utf8');
       let data = JSON.parse(rawData);
-      // console.log({ data });
       for (let role of data) {
         const record = await RoleDal.findOne({
           where: { title: role.title },
           attributes: ['id', 'title'],
           raw: true,
         });
-     //   console.log({ record });
         if (!record) {
+          logger.info(`Inserting role seeder ${role.title}`);
           await RoleDal.create({
             title: role.title,
           });
         }
       }
+      logger.info('Roles seeder executed successfully!');
     } catch (error) {
       console.log(error);
     }

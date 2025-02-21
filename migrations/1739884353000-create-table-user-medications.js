@@ -55,7 +55,7 @@ module.exports = {
         allowNull: false,
       },
       frequency: {
-        type: Sequelize.ENUM('Once a day', 'Two times a day', 'Three times a day', 'More than three times a day', 'Every X hours', 'On a recurring cycle', 'Every two days', 'Weekly', 'Bi weekly', 'Others'),
+        type: Sequelize.ENUM('Once a day', 'Two times a day', 'Three times a day', 'Every X hours', 'Every other day', 'Specific days of the week', 'Every X days', 'Every X weeks', 'Every X months'),
         allowNull: false,
       },
       requirements: {
