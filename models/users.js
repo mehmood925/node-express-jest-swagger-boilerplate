@@ -5,13 +5,13 @@ const Users = sequelize.define(
   'users',
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
     role_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'roles',
@@ -66,6 +66,11 @@ const Users = sequelize.define(
     is_active: {
       type: Sequelize.BOOLEAN,
       defaultValue: true,
+      allowNull: false,
+    },
+    is_pregnant: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
       allowNull: false,
     },
     email_verified: {

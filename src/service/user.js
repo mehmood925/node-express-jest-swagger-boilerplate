@@ -1,9 +1,9 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const passCom = require('joi-password-complexity');
 const { v4: uuidv4 } = require('uuid');
 const ERROR_CODES = require('../constant/error-messages');
 const CustomError = require('../utils/error');
-//const { Users, Roles } = require('../../models');
 const { EmailService } = require('../utils/email');
 const EmailTemplate = require('../utils/emailTemplate');
 const CONSTANTS = require('../constant/constant');
@@ -12,10 +12,10 @@ const { logger } = require('../utils/logger');
 const { generateTokens } = require('../middleware/auth');
 const { generateRandomCode } = require('../utils/randomNumber');
 const { RoleDal } = require('../dal');
-require('dotenv').config();
 const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
+const supabase = require('../utils/supabaseClient');
 
 const complexityOptions = {
   min: 8,
@@ -25,163 +25,26 @@ const complexityOptions = {
   numeric: 1,
   symbol: 1,
 };
-const API_URL = 'https://api.barcodelookup.com/v3/products';
-const API_KEY = 'rfm02p610h1nciuts1sohp494oyntz';
-let counter = 0;
+
 class UserService {
-  static async fetchBarcodeData(title) {
-    const queryParams = ['search', 'title', 'brand'];
+  static async signup(params) {
+    console.log({ params });
+    const { email, password } = params;
 
-    for (let param of queryParams) {
-      try {
-        const response = await axios.get(API_URL, {
-          params: {
-            key: API_KEY,
-            formatted: 'y',
-            [param]: title,
-          },
-        });
-
-        if (response.status === 200 && response.data.products.length > 0) {
-          counter += 1;
-          console.log('Found ', counter);
-          const product = response.data.products[0]; // Take the first product
-          return {
-            barcode_number: product.barcode_number || null,
-            barcode_formats: product.barcode_formats || null,
-          };
-        }
-      } catch (error) {
-        //console.log("Not Found at ", param , " iteration ", i+1)
-      }
-    }
-
-    return { barcode_number: null, barcode_formats: null };
-  }
-  static updateKeyName(data, oldKey, newKey) {
-    return data.map((obj) => {
-      if (obj.hasOwnProperty(oldKey)) {
-        return { [newKey]: obj[oldKey] };
-      }
-      return obj; // Return unchanged object if key is not found
-    });
-  }
-
-  static async updateJsonFile(jsonFilePath) {
-    try {
-      const filePath = path.resolve(jsonFilePath);
-      const rawData = fs.readFileSync(filePath, 'utf8');
-      let data = JSON.parse(rawData);
-      console.log({ len: data.length });
-      let cc = 0;
-      // data = data.filter((item)=> item.source === 'eu');
-      // console.log({len: data.length})
-      for (let obj of data) {
-        if (obj.source === 'au') {
-          const barcodeData = await this.fetchBarcodeData(obj.title);
-          obj.barcode_number = barcodeData.barcode_number;
-          obj.barcode_formats = barcodeData.barcode_formats;
-          fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
-          cc+=1;
-          console.log(
-            `Updated record ${cc} with value ${
-              barcodeData.barcode_number
-            } and counter so far is ${counter}`
-          );
-        }
-      }
-      //const updatedData = this.updateKeys(data);
-      //const newFilePath = '/Users/tk-lpt-0958/Downloads/work/node-express-jest-swagger-boilerplate/src/data/medcare_ai_combined_medications.json'
-      //fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 4));
-      console.log('JSON file updated successfully!');
-    } catch (error) {
-      console.error('Error processing JSON file:', error.message);
-    }
-  }
-
-  static removeQuotesFromStrength(data) {
-    return data.map((obj) => {
-      if (Array.isArray(obj.strength)) {
-        obj.strength = obj.strength.map((str) => str.replace(/"/g, '')); // Remove all double quotes
-      }
-      return obj;
-    });
-  }
-  static mergeByTitleAndStrength(data) {
-    const groupedData = {};
-
-    data.forEach((obj) => {
-      const key = `${obj.title}`;
-
-      if (!groupedData[key]) {
-        groupedData[key] = {
-          title: obj.title,
-          strength: [obj.strength],
-          manufacturers: obj.manufacturer,
-          barcode_number: obj.barcode_number,
-          barcode_formats: obj.barcode_formats,
-        };
-      } else {
-        groupedData[key].strength.push(obj.strength);
-      }
-    });
-
-    return Object.values(groupedData);
-  }
-  static removeNullStrengths(data) {
-    return data.map((obj) => {
-      if (Array.isArray(obj.strength)) {
-        obj.strength = obj.strength.filter((item) => item !== null);
-      }
-      return obj;
-    });
-  }
-  static sliceTitleAfterMg(data) {
-    return data.map((obj) => {
-      const mgRegex = /(\d+\s*mg)/i; // Matches "number + mg" (e.g., "400 mg")
-      const match = obj.title.match(mgRegex);
-
-      if (match) {
-        const mgIndex = match.index + match[0].length; // Find position after "mg"
-        obj.title = obj.title.slice(0, mgIndex).trim(); // Slice the title
-      }
-
-      return obj;
-    });
-  }
-  static updateKeys(data) {
-    const keyMap = {
-      'Lab Test': 'title',
-      Unit: 'unit',
-      Description: 'description',
-    };
-
-    return data.map((obj) => {
-      let updatedObj = {};
-      for (let key in obj) {
-        updatedObj[keyMap[key] || key] = obj[key]; // Rename keys if found in keyMap, otherwise keep original key
-      }
-      return updatedObj;
-    });
-  }
-
-  static async register(params) {
-    await this.updateJsonFile(
-      './src/data/medcare_ai_combined_medications.json'
-    );
-    return true;
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    console.log({ data });
+    if (error) console.log({ error });
+    return params;
     // const rsole = await RoleDal.findOne({
     //   where: { title_hash: hash('admin') },
     //   attributes: ['id', 'title', 'title_hash'],
     //   raw: false,
     // });
-
     // const rsole = await RoleDal.create({
     //   title: 'admin',
     //   title_hash: hash('admin')
     // });
     // console.log({ rsole });
-    return rsole;
     // const existingEmail = await Users.findOne({
     //   where: { email: params.email },
     //   attributes: ['id', 'email', 'phone', 'username'],
@@ -233,35 +96,64 @@ class UserService {
     //   phone: params.phone,
     //   timezone: params.timezone,
     // };
-
     // let userId = await Users.create(user);
-
     // RedisCache.set(CONSTANTS.USER_EMAIL_OTP_ATTEMPTS, userId, 1);
-
     // Service.sendEmailVerificationCode({
     //   email: params.email,
     //   verificationCode: verificationCode,
     // });
-
     // const { accessToken, refreshToken } = generateTokens({
     //   id: userId,
     //   email: user.email,
     //   role: user.role,
     // });
-
     // await UserTokens.create({
     //   userId: userId,
     //   token: accessToken,
     // });
-
     // RedisCache.setWithExpiry(
     //   CONSTANTS.USER_REFRESH_TOKENS,
     //   userId,
     //   refreshToken,
     //   CONSTANTS.USER_REFRESH_TOKEN_EXPIRY_IN_SECONDS
     // );
-
     // return { accessToken, refreshToken, verificationExpiry, userId: userId };
+  }
+
+  static async signupSocial(params) {
+    // console.log({ params });
+    // const { provider } = params; // e.g., "google", "github"
+
+    // const { data, error } = await supabase.auth.signInWithOAuth({
+    //   provider, // Supported providers: "google", "github", "facebook", etc.
+    //   options: { redirectTo: 'http://localhost:3000/auth/callback' },
+    // });
+
+    // if (error) return res.status(400).json({ error: error.message });
+    // return data.url;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'http://localhost:3000/api/v1/user/callback', // Change this to your frontend callback URL
+      },
+    });
+
+    if (error) throw error;
+    return { auth_url: data.url };
+  }
+
+  static async signinSocial(params) {
+    const { access_token } = params;
+
+    if (!access_token) {
+      return { error: 'Access token is required' };
+    }
+
+    // Verify the token and get user details
+    const { data: user, error } = await supabase.auth.getUser(access_token);
+
+    if (error) throw error;
+    return { user };
   }
 
   static sendEmailVerificationCode(params) {
@@ -273,6 +165,16 @@ class UserService {
   }
 
   static async login(params) {
+    const { email, password } = params;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) return { error: error.message };
+
+    return { message: 'Login successful!', data };
     //   const profile = await UserDal.findOne({ where: { email: params.email } });
     //   if (!profile) {
     //     throw new CustomError(ERROR_CODES.INVALID_EMAIL_PASSWORD);

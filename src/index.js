@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const { setRouter } = require('./routes/api');
+const authRoutes = require('./routes/auth');
 const { globalErrorHandler } = require('./utils/response');
 const { logger } = require('./utils/logger');
 const { CronClass } = require('./crons/cron');
@@ -37,6 +38,9 @@ if (process.env.ENV === 'development') {
 }
 
 /*///////////// SET PUBLIC ROUTER //////////////*/
+app.use(cors());
+app.use(express.json());
+app.use('/api', authRoutes);
 setRouter(app);
 
 /*///// GLOBAL ERROR LANDLER AS MIDDLEWARE ////*/

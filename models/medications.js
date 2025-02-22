@@ -5,8 +5,8 @@ const Medications = sequelize.define(
   'medications',
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },

@@ -2,6 +2,63 @@ const { UserService } = require('../service/user');
 const { logger } = require('../utils/logger');
 const { responseHandler } = require('../utils/response');
 class UserController {
+  static async signup(req, res, next) {
+    try {
+      const response = await UserService.signup(req.body);
+      return responseHandler({
+        response: res,
+        result: response,
+      });
+    } catch (error) {
+      logger.info(`=====> ERROR SIGNUP API`);
+      logger.info(error.message);
+      next(error);
+    }
+  }
+
+  static async signupSocial(req, res, next) {
+    try {
+      const response = await UserService.signupSocial(req.body);
+      return responseHandler({
+        response: res,
+        result: response,
+      });
+    } catch (error) {
+      logger.info(`=====> ERROR SIGNUP SOCIAL API`);
+      logger.info(error.message);
+      next(error);
+    }
+  }
+
+  static async signinSocial(req, res, next) {
+    try {
+      console.log({req})
+      const response = await UserService.signinSocial(req.query);
+      return responseHandler({
+        response: res,
+        result: response,
+      });
+    } catch (error) {
+      logger.info(`=====> ERROR SIGNUP SOCIAL API`);
+      logger.info(error.message);
+      next(error);
+    }
+  }
+
+  static async login(req, res, next) {
+    try {
+      const response = await UserService.login(req.body);
+      return responseHandler({
+        response: res,
+        result: response,
+      });
+    } catch (error) {
+      logger.info(`=====> ERROR REGISTER API`);
+      logger.info(error.message);
+      next(error);
+    }
+  }
+
   static async getProfile(req, res, next) {
     try {
       const response = await UserService.getProfile(req.headers.loggedUser);

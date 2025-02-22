@@ -5,13 +5,13 @@ const UserSubscriptions = sequelize.define(
   'user_subscriptions',
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
     user_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'users',
@@ -19,7 +19,7 @@ const UserSubscriptions = sequelize.define(
       },
     },
     subscription_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'subscriptions',

@@ -5,13 +5,13 @@ const UserMedicationLogs = sequelize.define(
   'user_medication_logs',
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
     user_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'users',
@@ -19,7 +19,7 @@ const UserMedicationLogs = sequelize.define(
       },
     },
     medication_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'medications',

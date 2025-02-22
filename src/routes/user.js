@@ -6,16 +6,6 @@ const userValdations = require('../validations/user');
 const { authMiddleware } = require('../middleware/auth');
 const CONSTANTS = require('../constant/constant');
 
-router.post(
-  '/register',
-  //validationMiddleware(userValdations.register),
-  UserController.register
-);
-router.post(
-  '/login',
-  validationMiddleware(userValdations.login),
-  UserController.login
-);
 router.get(
   '/getProfile',
   authMiddleware([CONSTANTS.USER]),

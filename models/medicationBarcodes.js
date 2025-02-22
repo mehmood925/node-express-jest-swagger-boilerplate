@@ -5,13 +5,13 @@ const MedicationBarcodes = sequelize.define(
   'medication_barcodes',
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
     medication_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'medications',
